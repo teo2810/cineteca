@@ -90,19 +90,16 @@ Leggi anche i termini TMDB. La chiave gratuita è per uso non commerciale. Se un
 
 ## 4. Mettere il sito online (GitHub Pages)
 
-Il repository deve essere **pubblico**, branch `main`, Pages dalla cartella radice (`/`).
+Il repository è pubblico, sul branch `main`. Manca un clic che da qui non si può fare: l’accesso GitHub collegato può creare il repo, non può accendere Pages.
 
-Se in cima al messaggio con cui ti è stata consegnata Cineteca c’è già l’indirizzo `https://teo2810.github.io/cineteca/`, il passaggio è fatto: aprile dal telefono. La prima volta GitHub può metterci alcuni minuti; se vedi un 404, aspetta e ricarica.
+1. Apri [github.com/teo2810/cineteca](https://github.com/teo2810/cineteca).
+2. **Settings** (Impostazioni del repository, non quelle del profilo).
+3. Nel menu a sinistra: **Pages**.
+4. Sotto «Build and deployment», scegli **Deploy from a branch**.
+5. Branch: **main**. Cartella: **/ (root)**. Salva.
+6. In cima alla stessa pagina, dopo uno o due minuti, compare l’indirizzo. Sarà `https://teo2810.github.io/cineteca/`. Se all’inizio vedi un errore 404, aspetta e ricarica: la prima pubblicazione non è immediata.
 
-Se Pages non risulta attivo:
-
-1. Apri il repository `cineteca` su GitHub.
-2. **Settings → Pages**.
-3. Build and deployment: **Deploy from a branch**.
-4. Branch: `main`, cartella: `/ (root)`. Salva.
-5. Dopo un po’ compare l’indirizzo `https://TUONOME.github.io/cineteca/`.
-
-Sul telefono, dal browser: menu **Aggiungi a schermata Home** (su iPhone, in Safari: pulsante di condivisione, poi «Aggiungi a Home»). I nomi dei pulsanti di iPhone sono **da verificare** se Apple li ha rinominati.
+Sul telefono, dal browser: menu **Aggiungi a schermata Home**. Su iPhone, in Safari: pulsante di condivisione, poi «Aggiungi a Home». I nomi di quei pulsanti sono **da verificare** se Apple li ha rinominati.
 
 ## 5. Collegare l’app
 
