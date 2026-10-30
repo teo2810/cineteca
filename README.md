@@ -1,6 +1,6 @@
 # Cineteca
 
-Archivio personale di film e serie, nel browser. Non è l’app «BingeT» e non ne copia grafica, icone o testi: ripete solo il tipo di funzioni (liste, stati, episodi, voti, note, numeri, obiettivi) e aggiunge una copia su Google Sheet che non dipende dalla cache del telefono.
+Archivio personale di film e serie, nel browser. Liste, stati, episodi, voti, note, numeri e obiettivi, più una copia su Google Sheet che non dipende dalla cache del telefono.
 
 Non c’è social, pubblicità o analytics. Non serve un abbonamento a pagamento.
 
@@ -24,7 +24,6 @@ Non c’è social, pubblicità o analytics. Non serve un abbonamento a pagamento
 ## Cosa non fa (e non va promesso)
 
 - Le notifiche push di una pagina web non sono affidabili, soprattutto su iPhone. Cineteca non le usa. C’è solo la sezione Uscite.
-- Non entra nell’account di BingeT e non garantisce di leggere il suo file di backup: quel formato non è pubblicato. Vedi «Da verificare».
 - Le copertine non vengono salvate nel foglio: si salva solo il percorso (`poster_path`). Senza rete la copertina può mancare; titolo, voto e note restano.
 - La chiave TMDB, l’indirizzo dello script e il token non stanno in questo repository. Restano nel browser, in `localStorage`.
 
@@ -142,11 +141,11 @@ Scaffale, Sguardo critico, Diario, Maratoneta, Mappa dei generi, Liste tue, Fino
 
 ## Da verificare
 
-Non ho potuto controllare queste cose contro i servizi veri (non ho la tua chiave né il tuo foglio):
+Non ho potuto controllare queste cose contro i servizi veri:
 
 - Che il POST verso Apps Script, dal telefono, superi il redirect di Google e scriva davvero le righe. Il GET (`?token=`) lo controlli tu al punto 15 della sezione 1. Se il GET funziona e il foglio resta vuoto dopo «Sincronizza ora», è quel limite: va detto, non è il caso di insistere a vuoto.
 - Che una cella di Sheet regga la tua nota più lunga. Il limite documentato da Google è circa 50.000 caratteri per cella. L’app non taglia il testo; una nota enorme può far fallire il salvataggio di quel solo titolo.
-- Il formato JSON esportato da BingeT. Non è pubblicato. L’import di Cineteca accetta il proprio backup, un oggetto con `items`, oppure un array di schede che abbiano già `id` (o `tmdb_id` insieme a `type` movie/tv). Se un file di BingeT non è così, l’app non tocca l’archivio e avvisa.
+- Un file JSON che non sia il backup di Cineteca. L’import accetta il proprio backup, un oggetto con `items`, oppure un array di schede con `id` (o `tmdb_id` insieme a `type` movie/tv). Se il file non è così, l’archivio non viene toccato.
 - I nomi esatti dei menu Google, TMDB e iPhone, se li hanno cambiati dopo questa pagina.
 - Se la chiave gratuita riceve sempre `watch/providers` per l’Italia. Se la scheda dice che non c’è nessuna piattaforma, può essere TMDB senza dati per quel titolo, non un guasto.
 - Il campo `job` del regista: TMDB lo manda in inglese (`Director`) anche con `language=it-IT`. I correlati «stesso regista» usano quello, più `Creator` e il dipartimento `Directing`.
