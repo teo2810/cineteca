@@ -14,28 +14,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,520;9..144,640&family=Outfit:wght@380;500;600&display=swap" rel="stylesheet">
 <style>
 :root, html[data-theme="dark"], html[data-theme="light"] {
-  --bg: #0c0a12;
-  --surface: rgba(255, 255, 255, 0.08);
-  --ink: #f7f4fb;
-  --muted: #c9bdd6;
-  --accent: #c8f54a;
-  --accent-ink: #17200a;
-  --line: rgba(255, 255, 255, 0.14);
+  --bg: #0e0e10;
+  --surface: #1a1a1e;
+  --ink: #f5f5f6;
+  --muted: #a1a1aa;
+  --accent: #c6f54a;
+  --accent-ink: #142006;
+  --line: rgba(255, 255, 255, 0.1);
   --serif: "Outfit", "Avenir Next", "Segoe UI", sans-serif;
   --sans: "Outfit", "Avenir Next", "Segoe UI", sans-serif;
-  --radius: 24px;
-  --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  --radius: 16px;
+  --shadow: none;
   color-scheme: dark;
 }
-html[data-theme="light"] { --bg: #14111c; }
+html[data-theme="light"] { --bg: #0e0e10; }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  background:
-    radial-gradient(540px 420px at 110% -8%, rgba(236, 72, 153, 0.55), transparent 58%),
-    radial-gradient(480px 380px at -10% 8%, rgba(124, 58, 237, 0.5), transparent 55%),
-    radial-gradient(420px 320px at 70% 110%, rgba(168, 85, 247, 0.22), transparent 50%),
-    var(--bg);
+  background: #0e0e10;
   color: var(--ink);
   font-family: var(--sans);
   font-size: 16px;
@@ -50,38 +46,36 @@ img { max-width: 100%; }
 .shell { min-height: 100vh; }
 .nav {
   position: fixed;
-  left: 50%;
-  right: auto;
-  bottom: calc(12px + env(safe-area-inset-bottom));
-  transform: translateX(-50%);
-  width: min(440px, calc(100% - 24px));
+  left: 0; right: 0; bottom: 0;
+  transform: none;
+  width: auto;
   z-index: 20;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  padding: 8px;
-  border-radius: 30px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #f7f4fb;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(22px) saturate(1.5);
-  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  padding: 4px 2px calc(4px + env(safe-area-inset-bottom));
+  border-radius: 0;
+  background: #111113;
+  color: #f5f5f6;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+  backdrop-filter: none;
 }
 .navbrand, .navfoot { display: none; }
 .nav button {
   position: relative;
   appearance: none; -webkit-appearance: none;
-  min-width: 0; min-height: 52px; border: 0; border-radius: 20px; background: transparent;
-  color: rgba(247, 244, 251, 0.55);
+  min-width: 0; min-height: 52px; border: 0; border-radius: 12px; background: transparent;
+  color: rgba(245, 245, 246, 0.45);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 0; padding: 0; font-size: 10px; font-weight: 600;
+  gap: 3px; padding: 4px 0; font-size: 10px; font-weight: 600;
 }
-.nav button span { display: none; }
-.nav button[aria-current="page"] { background: rgba(255, 255, 255, 0.18); color: #fff; }
-.nav button[aria-current="page"] svg { color: #fff; }
+.nav button span { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav button[aria-current="page"] { background: transparent; color: #fff; }
+.nav button[aria-current="page"] svg { color: #c6f54a; }
 .nav button[aria-current="page"]::after { display: none; }
 .nav svg { width: 22px; height: 22px; display: block; }
-.maincol { padding: 0 16px calc(108px + env(safe-area-inset-bottom)); max-width: 1120px; margin: 0 auto; }
+.maincol { padding: 0 16px calc(76px + env(safe-area-inset-bottom)); max-width: 1120px; margin: 0 auto; }
 .top {
   position: sticky; top: 0; z-index: 10;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -425,6 +419,31 @@ h1, h2, h3, .brand h1 { font-family: var(--sans); font-weight: 600; }
 @media (min-width: 960px) {
   .hero-poster { width: 100%; aspect-ratio: 16 / 8; }
   .billboard-body { display: block; }
+}
+.statpills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 14px; }
+.statpills span { display: block; background: #1a1a1e; border-radius: 16px; padding: 12px 10px; }
+.statpills b { display: block; font-size: 20px; letter-spacing: -0.03em; }
+.statpills span { color: var(--muted); font-size: 12px; }
+.posters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 10px; }
+.rail .tile { flex: 0 0 128px; }
+.tile .flag { display: none; }
+.scorebadge { background: #c6f54a; color: #142006; font-weight: 700; top: 8px; right: 8px; }
+.tile-poster { border-radius: 14px; box-shadow: none; }
+.epgrid { display: flex; flex-direction: column; gap: 6px; }
+.eptile { display: flex; align-items: center; gap: 12px; text-align: left; min-height: 52px; border-radius: 12px; background: #1a1a1e; border: 0; padding: 8px 12px; }
+.eptile b { font-size: 15px; min-width: 28px; font-family: var(--sans); }
+.eptile.on { background: #243018; color: #eaffc2; }
+.card, .pagehead, .ticket, details.filters, .field, .select, textarea, .top {
+  background: #161618;
+  border-color: rgba(255,255,255,.08);
+  backdrop-filter: none;
+}
+.pagehead { background: #161618; }
+h3 { font-size: 18px; margin: 18px 0 8px; }
+.statusline { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; }
+.statusline .chip { flex: 0 0 auto; }
+@media (min-width: 720px) {
+  .posters { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 }
 </style>
 
@@ -1495,7 +1514,8 @@ function figuresHtml(items) {
   const rated = titles.filter((i) => i.rating !== null);
   const avg = rated.length ? rated.reduce((sum, i) => sum + i.rating, 0) / rated.length : null;
   const eps = titles.reduce((n, i) => n + episodeProgress(i).seen, 0);
-  return `<p class="countline"><span><b>${titles.length}</b>${esc(t("statTitles"))}</span><span><b>${esc(avg === null ? "—" : formatScore(Math.round(avg * 10) / 10))}</b>${esc(t("statAvg"))}</span><span><b>${eps}</b>${esc(t("statEps"))}</span></p>`;
+  const cell = (n, label) => `<span><b>${esc(n)}</b>${esc(label)}</span>`;
+  return `<div class="statpills">${cell(titles.length, t("statTitles"))}${cell(avg === null ? "—" : formatScore(Math.round(avg * 10) / 10), t("statAvg"))}${cell(eps, t("statEps"))}</div>`;
 }
 function demoBannerHtml() {
   if (!hasDemo()) return "";
@@ -1545,16 +1565,17 @@ function libraryHtml() {
   const rows = visibleTitles();
   const has = titlesOf(state.items).length > 0;
   if (!has && state.route.name !== "list") return emptyLobbyHtml();
-  const hero = !filtersActive() ? pickHero() : null;
   const heading = state.route.name === "list" ? state.route.list : "";
   return `
-    ${heading ? `<p class="eyebrow">${esc(t("lists"))}</p><h2>${esc(heading)}</h2>` : ""}
+    ${heading ? `<p class="eyebrow">${esc(t("lists"))}</p><h2>${esc(heading)}</h2>` : `<h2>${esc(t("libraryTitle"))}</h2>`}
     ${state.route.name === "list" ? `<p><button class="btn ghost" type="button" data-act="delete-list" data-name="${esc(state.route.list)}">${esc(t("deleteList"))}</button></p>` : ""}
-    ${hero ? heroHtml(hero) : ""}
     ${demoBannerHtml()}
     ${has ? figuresHtml(state.items) : ""}
     <div class="toolbar">
       <input class="field searchline" id="q" type="search" enterkeyhint="search" placeholder="${esc(t("searchPh"))}" value="${esc(state.f.q)}" autocomplete="off">
+      <div class="chips statusline">
+        ${[["tutti", t("statusAll")], ...STATUSES.map((s) => [s, t("st_" + s)])].map(([s, label]) => `<button type="button" class="chip" data-act="set-filter" data-status="${s}" aria-pressed="${state.f.status === s}">${esc(label)}</button>`).join("")}
+      </div>
       <div class="seg" role="group" aria-label="${esc(t("filters"))}">
         ${["tutti", "movie", "tv"].map((k) => `<button type="button" class="chip" data-act="kind" data-kind="${k}" aria-pressed="${state.f.kind === k}">${esc(k === "tutti" ? t("kindAll") : k === "movie" ? t("kindMovie") : t("kindTv"))}</button>`).join("")}
         <button type="button" class="chip" data-act="viewmode" aria-pressed="${state.f.view === "wall"}">${esc(state.f.view === "wall" ? t("viewList") : t("viewWall"))}</button>
@@ -1576,28 +1597,31 @@ function libraryHtml() {
         </div>
       </details>
     </div>
-    <div id="list">${libraryItemsHtml(rows, hero)}</div>`;
+    <div id="list">${libraryItemsHtml(rows)}</div>`;
 }
 function filtersActive() {
   return !!(state.f.q.trim() || state.f.kind !== "tutti" || state.f.status !== "tutti" || state.f.genre || state.f.tag || state.route.name === "list");
 }
-function libraryItemsHtml(rows, hero) {
+function libraryItemsHtml(rows) {
   const list = rows || visibleTitles();
   if (!titlesOf(state.items).length) return `<div class="empty">${esc(t("emptyLibrary"))}</div>`;
   if (!list.length) return `<div class="empty">${esc(t("emptyFilter"))}</div>`;
-  const featured = hero || (!filtersActive() ? pickHero() : null);
-  const rails = filtersActive() ? "" : railsHtml(featured);
-  const wallRows = featured && !filtersActive() ? list.filter((i) => i.id !== featured.id) : list;
-  const body = state.f.view === "list"
-    ? `<div class="rowlist">${list.map(rowHtml).join("")}</div>`
-    : `<div class="shelf">${wallRows.map(showCardHtml).join("")}</div>`;
-  const shelf = state.f.view === "wall" && wallRows.length && !filtersActive() ? `<h3>${esc(t("shelf"))}</h3>` : "";
-  return `${rails}${shelf}${body}`;
+  const showRails = !filtersActive() && state.f.view !== "list";
+  const rails = showRails ? railsHtml() : "";
+  const railIds = new Set();
+  if (showRails) {
+    titlesOf(state.items).forEach((i) => {
+      if (i.status === "in_corso" || i.status === "da_vedere") railIds.add(i.id);
+    });
+  }
+  const wallRows = showRails ? list.filter((i) => !railIds.has(i.id)) : list;
+  if (state.f.view === "list") return `<div class="rowlist">${list.map(rowHtml).join("")}</div>`;
+  const grid = wallRows.length ? `<h3>${esc(t("shelf"))}</h3><div class="posters">${wallRows.map(tileHtml).join("")}</div>` : "";
+  return `${rails}${grid}`;
 }
-function railsHtml(hero) {
-  const hide = hero && hero.id;
-  const now = titlesOf(state.items).filter((i) => i.status === "in_corso" && i.id !== hide).slice(0, 12);
-  const next = titlesOf(state.items).filter((i) => i.status === "da_vedere" && i.id !== hide).slice(0, 12);
+function railsHtml() {
+  const now = titlesOf(state.items).filter((i) => i.status === "in_corso").slice(0, 12);
+  const next = titlesOf(state.items).filter((i) => i.status === "da_vedere").slice(0, 12);
   const rail = (title, items) => items.length ? `<h3>${esc(title)}</h3><div class="rail">${items.map(tileHtml).join("")}</div>` : "";
   return rail(t("railNow"), now) + rail(t("railNext"), next);
 }
@@ -1623,7 +1647,7 @@ function tileHtml(item) {
       <em class="flag${(item.tags || []).includes("sala-di-prova") ? " proof" : ""}">${esc((item.tags || []).includes("sala-di-prova") ? t("proof") : item.kind === "tv" ? t("tv") : t("movie"))}</em>
     </span>
     <span class="tile-title">${esc(item.title || t("none"))}</span>
-    <span class="meta">${esc([item.year, t("st_" + item.status)].filter(Boolean).join(" · "))}</span>
+    <span class="meta">${esc(p && (p.total || p.seen) ? t("episodeProgress", p) : [item.year, t("st_" + item.status)].filter(Boolean).join(" · "))}</span>
     ${p && (p.total || p.seen) ? `<span class="meter" title="${esc(t("episodeProgress", p))}"><span style="width:${pct}%"></span></span>` : ""}
   </button>`;
 }
@@ -1672,7 +1696,7 @@ function searchHtml() {
 function searchResultsHtml() {
   if (state.searchMsg) return `<p class="banner">${esc(state.searchMsg)}</p>`;
   if (!state.searchResults.length) return state.searchQ ? "" : archiveStrip();
-  return `<div class="wall">${state.searchResults.map((r) => {
+  return `<div class="posters">${state.searchResults.map((r) => {
     const id = r.media_type + "-" + r.id;
     const local = state.items.find((i) => i.id === id && !i.del);
     const title = r.title || r.name || "";
@@ -1687,7 +1711,7 @@ function searchResultsHtml() {
 function archiveStrip() {
   const recent = titlesOf(state.items).slice().sort((a, b) => (b.updated || 0) - (a.updated || 0)).slice(0, 9);
   if (!recent.length) return `<p class="tiny">${esc(t("emptyLibrary"))}</p>`;
-  return `<h3>${esc(t("inArchive"))}</h3><div class="wall">${recent.map(tileHtml).join("")}</div>`;
+  return `<h3>${esc(t("inArchive"))}</h3><div class="posters">${recent.map(tileHtml).join("")}</div>`;
 }
 
 function detailHtml() {
@@ -2320,6 +2344,11 @@ async function onAct(act, el, ev) {
   if (act === "open-list") { go("#/lista/" + encodeURIComponent(el.dataset.name)); return; }
   if (act === "kind") {
     state.f.kind = el.dataset.kind;
+    paint({ keepScroll: true });
+    return;
+  }
+  if (act === "set-filter") {
+    state.f.status = el.dataset.status || "tutti";
     paint({ keepScroll: true });
     return;
   }
