@@ -70,6 +70,7 @@ img { max-width: 100%; }
 .navbrand, .navfoot { display: none; }
 .nav button {
   position: relative;
+  appearance: none; -webkit-appearance: none;
   min-width: 0; min-height: 52px; border: 0; border-radius: 20px; background: transparent;
   color: rgba(247, 244, 251, 0.55);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -249,7 +250,8 @@ input[type="range"] { width: 100%; accent-color: var(--accent); min-height: 36px
 .figure { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 12px; }
 .figure b { display: block; font-family: var(--serif); font-size: 28px; letter-spacing: -0.03em; line-height: 1; }
 .figure span { color: var(--muted); font-size: 12px; }
-.heatwrap { display: grid; grid-template-columns: 28px 1fr; gap: 6px; overflow-x: auto; }
+.heatwrap { display: grid; grid-template-columns: 28px 1fr; gap: 6px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+.heatwrap::-webkit-scrollbar { display: none; }
 .heatlabels { display: grid; grid-template-rows: repeat(7, 14px); gap: 3px; color: var(--muted); font-size: 10px; }
 .heat { display: grid; grid-template-rows: repeat(7, 14px); grid-auto-flow: column; grid-auto-columns: 14px; gap: 3px; }
 .cell { width: 14px; height: 14px; border-radius: 4px; background: var(--line); }
@@ -323,6 +325,8 @@ details.filters summary { min-height: 44px; display: flex; align-items: center; 
   }
   .nav button[aria-current="page"] svg { color: #c8f54a; }
   .navfoot { display: block; margin-top: auto; padding: 16px 10px 4px; color: #8d8073; font-size: 13px; line-height: 1.4; }
+  .brand { display: none; }
+  .top { justify-content: flex-end; background: transparent; border: 0; box-shadow: none; }
   .maincol { padding: 8px 36px 56px; }
   .toast { left: 276px; right: auto; max-width: 420px; bottom: 24px; }
   .billboard { margin-left: 0; margin-right: 0; border-radius: 28px; }
@@ -427,7 +431,7 @@ h1, h2, h3, .brand h1 { font-family: var(--sans); font-weight: 600; }
 </head>
 <body>
 <div class="shell">
-  <nav id="nav" aria-label="Sezioni"></nav>
+  <nav id="nav" class="nav" aria-label="Sezioni"></nav>
   <div class="maincol">
     <header class="top">
       <div class="brand">
