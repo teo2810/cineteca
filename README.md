@@ -19,7 +19,7 @@ Non c’è social, pubblicità o analytics. Non serve un abbonamento a pagamento
 - Nella scheda, «Correlati»: stessa saga, stesso regista, attori in comune, con il motivo scritto sotto.
 - Export e import JSON. L’unione tiene la scheda modificata più di recente.
 - Interfaccia in italiano. I testi stanno nell’oggetto `I18N` in `index.html`: un’altra lingua si aggiunge lì, non è ancora tradotta.
-- Tema chiaro o scuro, automatico come il telefono, oppure fisso dalle Impostazioni.
+- All’apertura, se l’archivio è vuoto, compare una sala di prova: sei titoli inventati, con locandine originali. Non sono film veri e non arrivano da TMDB. Si tolgono con «Togli gli esempi» e non tornano da soli.
 
 ## Cosa non fa (e non va promesso)
 

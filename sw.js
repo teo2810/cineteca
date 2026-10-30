@@ -1,6 +1,6 @@
 /* Guscio della PWA. Non mette in cache schede, immagini TMDB né lo Sheet. */
-const CACHE = "cineteca-shell-v2";
-const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
+const CACHE = "cineteca-shell-v3";
+const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./posters/notte.jpg", "./posters/stazione.jpg", "./posters/cena.jpg", "./posters/marea.jpg", "./posters/lanterne.jpg", "./posters/piano.jpg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -23,7 +23,8 @@ function isShell(pathname) {
     pathname.endsWith("/index.html") ||
     pathname.endsWith("/manifest.webmanifest") ||
     pathname.endsWith("/icon-192.png") ||
-    pathname.endsWith("/icon-512.png")
+    pathname.endsWith("/icon-512.png") ||
+    pathname.includes("/posters/")
   );
 }
 
