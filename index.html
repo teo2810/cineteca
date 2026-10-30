@@ -57,22 +57,31 @@ button:disabled { cursor: default; opacity: 0.55; }
 img { max-width: 100%; }
 .shell { min-height: 100vh; }
 .nav {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
-  display: flex; gap: 2px;
-  padding: 6px 8px calc(8px + env(safe-area-inset-bottom));
-  background: color-mix(in srgb, var(--bg) 86%, transparent);
-  border-top: 1px solid var(--line);
-  backdrop-filter: blur(16px);
+  position: fixed;
+  left: 10px; right: 10px;
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 2px;
+  padding: 6px;
+  border-radius: 28px;
+  background: #16130f;
+  color: #f6f1e8;
+  border: 1px solid rgba(246, 241, 232, 0.1);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38);
 }
+.navbrand, .navfoot { display: none; }
 .nav button {
-  flex: 1; min-height: 52px; border: 0; border-radius: 14px; background: transparent;
-  color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 2px; font-size: 11px; font-weight: 500;
+  min-width: 0; min-height: 58px; border: 0; border-radius: 22px; background: transparent;
+  color: #b7aa9c; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px; padding: 4px 1px; font-size: 11px; font-weight: 600; letter-spacing: 0;
 }
-.nav button[aria-current="page"] { color: var(--ink); }
-.nav button[aria-current="page"] svg { color: var(--accent); }
-.nav svg { width: 22px; height: 22px; }
-.maincol { padding: 0 16px calc(96px + env(safe-area-inset-bottom)); max-width: 1120px; margin: 0 auto; }
+.nav button span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav button[aria-current="page"] { background: #f6f1e8; color: #1b1712; }
+.nav button[aria-current="page"] svg { color: #9a5318; }
+.nav svg { width: 22px; height: 22px; display: block; }
+.maincol { padding: 0 16px calc(112px + env(safe-area-inset-bottom)); max-width: 1120px; margin: 0 auto; }
 .top {
   position: sticky; top: 0; z-index: 10;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -82,13 +91,20 @@ img { max-width: 100%; }
 }
 .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .brand img { width: 34px; height: 34px; border-radius: 10px; }
-.brand h1 { font-family: var(--serif); font-size: 22px; line-height: 1; margin: 0; font-weight: 560; letter-spacing: -0.03em; }
+.brand h1 { font-family: var(--serif); font-size: 26px; line-height: 1; margin: 0; font-weight: 560; letter-spacing: -0.03em; }
 .eyebrow { margin: 0 0 4px; color: var(--accent); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; }
 .sync {
-  border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 80%, transparent);
-  border-radius: 999px; min-height: 36px; padding: 0 12px; font-size: 12px; color: var(--muted);
-  max-width: 42vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; min-height: 40px; padding: 0 14px 0 12px; font-size: 12px; font-weight: 600; color: var(--ink);
+  max-width: 46vw; box-shadow: 0 8px 20px color-mix(in srgb, var(--ink) 8%, transparent);
 }
+.sync::before {
+  content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex: 0 0 auto;
+}
+.sync.on::before { background: #2f8f5b; }
+.sync.bad::before { background: #b4532a; }
+.sync span, .sync { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 h2 { font-family: var(--serif); font-weight: 560; font-size: 34px; line-height: 1.05; letter-spacing: -0.03em; margin: 6px 0 8px; }
 h3 { font-family: var(--serif); font-size: 22px; margin: 18px 0 10px; font-weight: 560; letter-spacing: -0.02em; }
 .lead { color: var(--muted); margin: 0 0 16px; max-width: 38rem; }
@@ -126,9 +142,22 @@ h3 { font-family: var(--serif); font-size: 22px; margin: 18px 0 10px; font-weigh
 .row b { display: block; font-size: 16px; line-height: 1.3; }
 .meta { color: var(--muted); font-size: 12px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg {
+  display: flex; gap: 4px; padding: 4px; overflow-x: auto;
+  background: color-mix(in srgb, var(--ink) 5%, var(--surface));
+  border: 1px solid var(--line); border-radius: 18px;
+}
+.seg .chip { flex: 1; border: 0; background: transparent; border-radius: 14px; white-space: nowrap; }
+.seg .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 .chip, .select, .field, .btn { min-height: 44px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
-.chip { padding: 0 14px; }
+.chip { padding: 0 14px; font-weight: 600; }
 .chip[aria-pressed="true"], .chip.on { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.select {
+  appearance: none; padding-right: 36px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 52%, calc(100% - 12px) 52%;
+  background-size: 6px 6px, 6px 6px; background-repeat: no-repeat;
+}
 .toolbar { display: flex; flex-direction: column; gap: 10px; margin: 8px 0 4px; }
 .field, .select, textarea {
   width: 100%; padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line);
@@ -139,7 +168,33 @@ textarea { min-height: 150px; border-radius: 18px; resize: vertical; line-height
 .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); font-weight: 500; }
 .btn.full { width: 100%; border-radius: 14px; }
 .stack { display: flex; flex-direction: column; gap: 10px; }
-.card { background: color-mix(in srgb, var(--surface) 92%, transparent); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin: 0 0 12px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 18px 16px 16px;
+  margin: 0 0 14px;
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--ink) 6%, transparent);
+}
+.card h3 { margin-top: 0; }
+.pagehead {
+  margin: 2px 0 18px; padding: 22px 18px 18px; border-radius: 28px; color: #f6f1e8;
+  background:
+    radial-gradient(420px 180px at 100% -30%, rgba(228, 161, 90, 0.5), transparent 60%),
+    #16130f;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+}
+.pagehead .eyebrow { color: #e4a15a; }
+.pagehead h2 { color: #f6f1e8; font-size: 40px; margin: 0 0 6px; }
+.pagehead .lead { color: #e4d5c6; margin: 0 0 14px; }
+.pagehead .field { background: #fffdf8; color: #1b1712; border: 0; }
+html[data-theme="dark"] .pagehead .field { background: #2a241c; color: #f6f1e8; }
+.searchbar { display: flex; gap: 8px; align-items: center; }
+.searchbar .field { min-height: 52px; border-radius: 999px; padding-left: 18px; }
+.toast {
+  position: fixed; left: 16px; right: 16px; bottom: calc(102px + env(safe-area-inset-bottom));
+  z-index: 30; background: var(--ink); color: var(--bg); border-radius: 16px; padding: 12px 14px;
+}
 .lobby { padding: 12px 0 8px; }
 .lobby h2 { font-size: 42px; max-width: 12ch; }
 .frames { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 22px; }
@@ -209,7 +264,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); min-height: 36px
 .medal.t2 { background: color-mix(in srgb, var(--accent) 78%, var(--ink)); }
 .medal.t3 { background: var(--accent); }
 .toast {
-  position: fixed; left: 16px; right: 16px; bottom: calc(86px + env(safe-area-inset-bottom));
+  position: fixed; left: 16px; right: 16px; bottom: calc(102px + env(safe-area-inset-bottom));
   z-index: 30; background: var(--ink); color: var(--bg); border-radius: 16px; padding: 12px 14px;
 }
 .banner { border: 1px solid var(--line); background: color-mix(in srgb, var(--accent) 12%, var(--surface)); border-radius: 16px; padding: 12px 14px; margin: 0 0 12px; }
@@ -236,15 +291,27 @@ details.filters summary { min-height: 44px; display: flex; align-items: center; 
   .lobby h2 { font-size: 64px; }
 }
 @media (min-width: 960px) {
-  .shell { display: grid; grid-template-columns: 228px 1fr; }
+  .shell { display: grid; grid-template-columns: 252px 1fr; }
   .nav {
-    position: sticky; top: 0; height: 100vh; flex-direction: column; align-items: stretch;
-    border-top: 0; border-right: 1px solid var(--line); padding: 22px 12px; background: transparent; backdrop-filter: none;
+    position: sticky; top: 0; left: auto; right: auto; bottom: auto;
+    width: 252px; height: 100vh;
+    display: flex; flex-direction: column; align-items: stretch;
+    grid-template-columns: none;
+    border-radius: 0; padding: 22px 14px 18px;
+    background: #14110e; box-shadow: none;
   }
-  .nav button { flex-direction: row; justify-content: flex-start; gap: 10px; font-size: 15px; padding: 0 12px; border-radius: 12px; }
-  .nav button[aria-current="page"] { background: color-mix(in srgb, var(--accent) 16%, transparent); }
+  .navbrand { display: flex; align-items: center; gap: 12px; padding: 2px 8px 18px; color: #f6f1e8; }
+  .navbrand img { width: 44px; height: 44px; border-radius: 14px; }
+  .navbrand strong { display: block; font-family: var(--serif); font-size: 24px; font-weight: 560; letter-spacing: -0.03em; line-height: 1; }
+  .navbrand span { display: block; margin-top: 4px; color: #e4a15a; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; }
+  .nav button {
+    flex-direction: row; justify-content: flex-start; gap: 12px;
+    min-height: 48px; font-size: 16px; padding: 0 14px; border-radius: 14px; color: #d9cbbd;
+  }
+  .nav button[aria-current="page"] { background: #f6f1e8; color: #1b1712; }
+  .navfoot { display: block; margin-top: auto; padding: 16px 10px 4px; color: #8d8073; font-size: 13px; line-height: 1.4; }
   .maincol { padding: 8px 36px 56px; }
-  .toast { left: 252px; right: auto; max-width: 420px; bottom: 24px; }
+  .toast { left: 276px; right: auto; max-width: 420px; bottom: 24px; }
   .billboard { margin-left: 0; margin-right: 0; border-radius: 28px; }
   .billboard-body { grid-template-columns: 180px 1fr; min-height: 280px; align-items: end; }
   .hero-poster { width: 180px; }
@@ -328,6 +395,8 @@ const I18N = {
     navUpcoming: "Uscite",
     navStats: "Numeri",
     navSettings: "Impostazioni",
+    navSettingsShort: "Opzioni",
+    navFoot: "Solo tuo. Niente social, niente pubblicità.",
     libraryTitle: "Libreria",
     libraryLead: "Film e serie, con stati, voti e note. I dati restano prima sul dispositivo, poi sul foglio Google se lo colleghi.",
     searchPh: "Titolo, regista, attore, genere, tag",
@@ -506,6 +575,13 @@ const I18N = {
     truthOn: "Copia di lavoro sul dispositivo. Fonte di verità: il foglio Google, dopo il sync.",
     truthOff: "Solo questo browser, finché non colleghi il foglio.",
     tmdbCredit: "Questo prodotto usa l'API TMDB ma non è approvato né certificato da TMDB.",
+    tmdbWhere: "Incolla la chiave qui, non in chat e non nel sito: chiunque apra il codice la leggerebbe. Resta solo in questo browser. Su themoviedb.org: accedi, Impostazioni, API, chiedi una chiave v3 (API Key).",
+    setLook: "Aspetto",
+    setTmdb: "Catalogo",
+    setSheet: "Foglio Google",
+    setFile: "Copia sul dispositivo",
+    showKey: "Mostra",
+    hideKey: "Nascondi",
     tmdbLink: "themoviedb.org",
     langNote: "Interfaccia in italiano. I testi stanno nell'oggetto I18N: per un'altra lingua si aggiunge una voce, non è ancora tradotto.",
     syncOff: "Foglio non collegato",
@@ -615,13 +691,13 @@ function esc(s) {
 }
 function icon(name) {
   const paths = {
-    library: '<rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M8 8h8M8 12h8M8 16h5"></path>',
-    search: '<circle cx="11" cy="11" r="6"></circle><path d="M16 16l4 4"></path>',
-    calendar: '<rect x="4" y="5" width="16" height="15" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path>',
-    chart: '<path d="M4 19V10M10 19V5M16 19v-7M22 19H2"></path>',
-    gear: '<circle cx="12" cy="12" r="3"></circle><path d="M12 3.5v2.2M12 18.3V20.5M3.5 12h2.2M18.3 12H20.5M6.1 6.1l1.6 1.6M16.3 16.3l1.6 1.6M17.9 6.1l-1.6 1.6M7.7 16.3l-1.6 1.6"></path>'
+    library: '<path fill="currentColor" d="M4 4.2h2.1v1.8H4V4.2zm0 3.5h2.1v1.8H4V7.7zm0 3.4h2.1v1.8H4v-1.8zm0 3.5h2.1v1.8H4v-1.8zm0 3.4h2.1V20H4v-1.8zM17.9 4.2H20v1.8h-2.1V4.2zm0 3.5H20v1.8h-2.1V7.7zm0 3.4H20v1.8h-2.1v-1.8zm0 3.5H20v1.8h-2.1v-1.8zm0 3.4H20V20h-2.1v-1.8zM7.4 4.6h9.2c.6 0 1 .4 1 1v12.8c0 .6-.4 1-1 1H7.4c-.6 0-1-.4-1-1V5.6c0-.6.4-1 1-1zm1.2 2.6h6.8v1.5H8.6V7.2zm0 3h6.8v1.5H8.6v-1.5zm0 3h4.4v1.5H8.6v-1.5z"/>',
+    search: '<path fill="currentColor" d="M10.4 3a7.4 7.4 0 0 1 5.9 11.8l3.9 3.9a1.15 1.15 0 0 1-1.63 1.62l-3.9-3.9A7.4 7.4 0 1 1 10.4 3zm0 2.2a5.2 5.2 0 1 0 0 10.4 5.2 5.2 0 0 0 0-10.4z"/>',
+    calendar: '<path fill="currentColor" d="M8 2.6a1.1 1.1 0 0 1 1.1 1.1V5h5.8V3.7a1.1 1.1 0 1 1 2.2 0V5H19a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1.9V3.7A1.1 1.1 0 0 1 8 2.6zM5 9.2V19h14V9.2H5zm2.2 3.1h2.3v2.2H7.2v-2.2zm4.1 0h2.3v2.2h-2.3v-2.2z"/>',
+    chart: '<path fill="currentColor" d="M3 20.2a1.1 1.1 0 0 1 0-2.2h1.2V11a1.2 1.2 0 0 1 2.4 0v7h2.2V6.2a1.2 1.2 0 0 1 2.4 0V18h2.2v-5.2a1.2 1.2 0 1 1 2.4 0V18H20a1.1 1.1 0 1 1 0 2.2H3z"/>',
+    gear: '<path fill="currentColor" d="M10.2 2.8h3.6l.4 2.1a7.2 7.2 0 0 1 1.8.9l1.9-1 2.5 2.5-1 1.9c.4.6.7 1.2.9 1.8l2.1.4v3.6l-2.1.4a7.2 7.2 0 0 1-.9 1.8l1 1.9-2.5 2.5-1.9-1a7.2 7.2 0 0 1-1.8.9l-.4 2.1h-3.6l-.4-2.1a7.2 7.2 0 0 1-1.8-.9l-1.9 1-2.5-2.5 1-1.9a7.2 7.2 0 0 1-.9-1.8l-2.1-.4V10.9l2.1-.4c.2-.6.5-1.2.9-1.8l-1-1.9 2.5-2.5 1.9 1c.6-.4 1.2-.7 1.8-.9l.4-2.1zM12 9.1a2.9 2.9 0 1 0 0 5.8 2.9 2.9 0 0 0 0-5.8z"/>'
   };
-  return `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">${paths[name] || ""}</svg>`;
+  return `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[name] || ""}</svg>`;
 }
 function dayKey(d) {
   const y = d.getFullYear();
@@ -1053,6 +1129,8 @@ function paintSync() {
   const btn = document.getElementById("syncBtn");
   if (!btn) return;
   btn.textContent = state.syncText || t("syncOff");
+  btn.classList.toggle("on", !!(sheetUrl() && settings.token) && !state.syncError);
+  btn.classList.toggle("bad", !!state.syncError);
   btn.title = state.syncError || (t("lastSync") + ": " + formatWhen(settings.lastSync));
 }
 function scheduleSync() {
@@ -1156,11 +1234,14 @@ function paintChrome() {
     ["search", "#/cerca", "search", "navSearch"],
     ["upcoming", "#/uscite", "calendar", "navUpcoming"],
     ["stats", "#/numeri", "chart", "navStats"],
-    ["settings", "#/impostazioni", "gear", "navSettings"]
+    ["settings", "#/impostazioni", "gear", "navSettingsShort"]
   ];
-  document.getElementById("nav").innerHTML = items.map(([id, hash, ic, key]) =>
-    `<button type="button" data-act="nav" data-hash="${hash}" ${route === id ? 'aria-current="page"' : ""}>${icon(ic)}<span>${esc(t(key))}</span></button>`
-  ).join("");
+  document.getElementById("nav").innerHTML =
+    `<div class="navbrand"><img src="icon-192.png" alt=""><div><span>${esc(t("eyebrow"))}</span><strong>Cineteca</strong></div></div>` +
+    items.map(([id, hash, ic, key]) =>
+      `<button type="button" data-act="nav" data-hash="${hash}" ${route === id ? 'aria-current="page"' : ""}>${icon(ic)}<span>${esc(t(key))}</span></button>`
+    ).join("") +
+    `<p class="navfoot">${esc(t("navFoot"))}</p>`;
   if (!state.syncText) state.syncText = sheetUrl() && settings.token ? t("syncIdle") : t("syncOff");
   paintSync();
 }
@@ -1388,7 +1469,7 @@ function libraryHtml() {
     ${has ? figuresHtml(state.items) : ""}
     <div class="toolbar">
       <input class="field searchline" id="q" type="search" enterkeyhint="search" placeholder="${esc(t("searchPh"))}" value="${esc(state.f.q)}" autocomplete="off">
-      <div class="chips" role="group">
+      <div class="seg" role="group" aria-label="${esc(t("filters"))}">
         ${["tutti", "movie", "tv"].map((k) => `<button type="button" class="chip" data-act="kind" data-kind="${k}" aria-pressed="${state.f.kind === k}">${esc(k === "tutti" ? t("kindAll") : k === "movie" ? t("kindMovie") : t("kindTv"))}</button>`).join("")}
         <button type="button" class="chip" data-act="viewmode" aria-pressed="${state.f.view === "wall"}">${esc(state.f.view === "wall" ? t("viewList") : t("viewWall"))}</button>
       </div>
@@ -1478,13 +1559,15 @@ function posterBox(posterPath, title, cls) {
   return `<span class="${cls}">${posterInner(posterPath, title)}</span>`;
 }
 
+function pageHead(kicker, title, lead, extra) {
+  return `<header class="pagehead"><p class="eyebrow">${esc(kicker)}</p><h2>${esc(title)}</h2>${lead ? `<p class="lead">${esc(lead)}</p>` : ""}${extra || ""}</header>`;
+}
 function searchHtml() {
-  return `<p class="eyebrow">TMDB</p><h2>${esc(t("searchTitle"))}</h2>
-    <p class="lead">${esc(t("searchLead"))}</p>
-    <form class="split searchline" data-act="do-search" style="margin-bottom:16px">
+  const form = `<form class="searchbar" data-act="do-search">
       <input class="field grow" id="searchQ" type="search" enterkeyhint="search" value="${esc(state.searchQ)}" placeholder="${esc(t("searchTitle"))}" autocomplete="off">
       <button class="btn" type="submit">${esc(t("searchBtn"))}</button>
-    </form>
+    </form>`;
+  return `${pageHead("TMDB", t("searchTitle"), t("searchLead"), form)}
     <div id="searchOut">${searchResultsHtml()}</div>`;
 }
 function searchResultsHtml() {
@@ -1629,8 +1712,7 @@ function relatedHtml(item) {
 function upcomingHtml() {
   const today = dayKey(new Date());
   const rows = titlesOf(state.items).filter((i) => i.kind === "tv" && i.nextEpisode && i.nextEpisode.airDate).slice().sort((a, b) => String(a.nextEpisode.airDate).localeCompare(String(b.nextEpisode.airDate)));
-  return `<h2>${esc(t("upcomingTitle"))}</h2>
-    <p class="lead">${esc(t("upcomingLead"))}</p>
+  return `${pageHead("Cineteca", t("upcomingTitle"), t("upcomingLead"))}
     <p class="tiny">${esc(t("upcomingCap"))}</p>
     <p><button class="btn" type="button" data-act="refresh-upcoming">${esc(t("refreshUpcoming"))}</button></p>
     ${state.upcomingMsg ? `<p class="banner">${esc(state.upcomingMsg)}</p>` : ""}
@@ -1644,8 +1726,7 @@ function upcomingHtml() {
 function statsHtml() {
   const items = engagedOf(state.items);
   const counts = activityMap(state.items);
-  return `<p class="eyebrow">Cineteca</p><h2>${esc(t("statsTitle"))}</h2>
-    <p class="lead">${esc(t("statsLead"))}</p>
+  return `${pageHead("Cineteca", t("statsTitle"), t("statsLead"))}
     ${figuresHtml(state.items)}
     <p><button class="btn ghost" type="button" data-act="nav" data-hash="#/obiettivi">${esc(t("openGoals"))}</button></p>
     <section class="card"><h3>${esc(t("heatmap"))}</h3>${heatmapHtml(counts)}</section>
@@ -1695,7 +1776,7 @@ function platformSection(items) {
   return body + `<p><button class="btn ghost" type="button" data-act="refresh-providers">${esc(t("platformsBtn"))}</button></p>`;
 }
 function goalsHtml() {
-  return `<h2>${esc(t("goalsTitle"))}</h2><p class="lead">${esc(t("goalsLead"))}</p><div class="goals">${GOALS.map(goalCard).join("")}</div>`;
+  return `${pageHead("Cineteca", t("goalsTitle"), t("goalsLead"))}<div class="goals">${GOALS.map(goalCard).join("")}</div>`;
 }
 function goalCard(goal) {
   const value = goal.value(state.items);
@@ -1708,25 +1789,37 @@ function goalCard(goal) {
 
 function settingsHtml() {
   const trash = state.items.filter((i) => (i.kind === "movie" || i.kind === "tv") && i.del);
-  return `<h2>${esc(t("settingsTitle"))}</h2>
-    <p class="lead">${esc(t("settingsLead"))}</p>
+  return `${pageHead("Cineteca", t("settingsTitle"), t("settingsLead"))}
     <p class="banner">${esc(sheetUrl() && settings.token ? t("truthOn") : t("truthOff"))}</p>
     <section class="card stack">
+      <h3>${esc(t("setLook"))}</h3>
       <label>${esc(t("theme"))}<select class="select" id="theme">${[["auto", "themeAuto"], ["light", "themeLight"], ["dark", "themeDark"]].map(([v, k]) => `<option value="${v}" ${settings.theme === v ? "selected" : ""}>${esc(t(k))}</option>`).join("")}</select></label>
+    </section>
+    <section class="card stack">
+      <h3>${esc(t("setTmdb"))}</h3>
+      <p class="tiny">${esc(t("tmdbWhere"))}</p>
       <label>${esc(t("tmdbKey"))}<input class="field" id="tmdbKey" type="password" autocomplete="off" value="${esc(settings.tmdbKey || "")}"></label>
-      <p class="tiny">${esc(t("tmdbCredit"))} <a href="https://www.themoviedb.org/" rel="noopener noreferrer">themoviedb.org</a></p>
-      <label>${esc(t("scriptUrl"))}<input class="field" id="scriptUrl" type="url" inputmode="url" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(settings.scriptUrl || "")}"></label>
-      <label>${esc(t("token"))}<input class="field" id="token" type="password" autocomplete="off" value="${esc(settings.token || "")}"></label>
+      <button class="btn ghost" type="button" data-act="reveal-key">${esc(t("showKey"))}</button>
       <label>${esc(t("region"))}<input class="field" id="region" maxlength="2" autocapitalize="characters" value="${esc(settings.region || "IT")}"></label>
       <p class="tiny">${esc(t("regionHint"))}</p>
+      <p class="tiny">${esc(t("tmdbCredit"))} <a href="https://www.themoviedb.org/" rel="noopener noreferrer">themoviedb.org</a></p>
       <button class="btn" type="button" data-act="save-settings">${esc(t("save"))}</button>
-      <button class="btn ghost" type="button" data-act="test-sheet">${esc(t("testLink"))}</button>
-      <button class="btn ghost" type="button" data-act="sync-now">${esc(t("syncNow"))}</button>
+    </section>
+    <section class="card stack">
+      <h3>${esc(t("setSheet"))}</h3>
+      <label>${esc(t("scriptUrl"))}<input class="field" id="scriptUrl" type="url" inputmode="url" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(settings.scriptUrl || "")}"></label>
+      <label>${esc(t("token"))}<input class="field" id="token" type="password" autocomplete="off" value="${esc(settings.token || "")}"></label>
+      <button class="btn" type="button" data-act="save-settings">${esc(t("save"))}</button>
+      <div class="split">
+        <button class="btn ghost" type="button" data-act="test-sheet">${esc(t("testLink"))}</button>
+        <button class="btn ghost" type="button" data-act="sync-now">${esc(t("syncNow"))}</button>
+      </div>
       <p class="tiny">${esc(t("lastSync"))}: ${esc(formatWhen(settings.lastSync))}${state.syncError ? " · " + esc(state.syncError) : ""}</p>
       <p class="tiny">${esc(t("persist"))}: ${esc(state.persistText || t("persistUnknown"))}</p>
       <p class="tiny">${esc(t("sw"))}: ${esc(state.swText || t("swOff"))}</p>
     </section>
     <section class="card stack">
+      <h3>${esc(t("setFile"))}</h3>
       <button class="btn" type="button" data-act="export">${esc(t("exportBtn"))}</button>
       <label class="btn ghost" style="display:inline-flex;align-items:center;justify-content:center">${esc(t("importBtn"))}<input id="importFile" type="file" accept="application/json,.json" hidden></label>
       <p class="tiny">${esc(t("importHelp"))}</p>
@@ -2112,6 +2205,13 @@ async function onEpisode(el) {
 }
 async function onAct(act, el, ev) {
   if (act === "nav") { go(el.dataset.hash); return; }
+  if (act === "reveal-key") {
+    const input = document.getElementById("tmdbKey");
+    if (!input) return;
+    input.type = input.type === "password" ? "text" : "password";
+    el.textContent = input.type === "password" ? t("showKey") : t("hideKey");
+    return;
+  }
   if (act === "back") {
     if (history.length > 1) history.back();
     else go("#/");
