@@ -591,6 +591,50 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
   .coverflow { padding-left: 6vw; padding-right: 6vw; }
   .nowcard .tile-poster { min-height: 340px; }
 }
+.mast { display: flex; align-items: center; gap: 12px; margin: 4px 0 14px; }
+.mark { width: 46px; height: 46px; border-radius: 16px; display: grid; place-items: center; background: #c6f54a; color: #142006; font-weight: 800; font-size: 22px; box-shadow: 0 0 18px rgba(198,245,74,.45); }
+.mastname { display: flex; flex-direction: column; min-width: 0; }
+.mastname strong { font-size: 22px; letter-spacing: -0.03em; line-height: 1; }
+.mastname small { color: #9aa0a6; font-size: 13px; }
+.onlinetag { margin-left: auto; color: #9aa0a6; font-size: 14px; }
+.onlinetag.off { color: #f0a35e; }
+.hours { padding: 14px 14px 12px; background: rgba(18, 20, 24, 0.72); }
+.hours-kicker { display: flex; align-items: center; gap: 6px; }
+.hours-kicker::before { content: ""; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #d6ff6a; box-shadow: inset 0 0 0 3px transparent; }
+.hourpills { background: #101216; padding: 3px; border-radius: 999px; gap: 0; }
+.hourpills button { border: 0; background: transparent; color: #d5d5d8; min-height: 30px; padding: 0 10px; font-size: 12px; }
+.hours-num { margin: 0; }
+.hours-num b { font-size: 54px; color: #fff; }
+.hours-num span { color: #c6f54a; font-size: 20px; font-weight: 700; }
+.hours-split { display: flex; flex-direction: column; align-items: stretch; gap: 4px; width: 116px; }
+.splitlabs { display: flex; justify-content: space-between; color: #9aa0a6; font-size: 11px; }
+.splitbar { width: 100%; }
+.dock { background: transparent; border: 0; box-shadow: none; backdrop-filter: none; padding: 0; }
+.dock .field { border-radius: 999px; min-height: 48px; text-align: center; background: rgba(22,24,28,.85); }
+.dock .chip { background: #2a2c31; color: #eee; border: 0; }
+.dock .chip[aria-pressed="true"] { background: #c6f54a; color: #142006; }
+.nowcard { border-radius: 26px; }
+.nowtop .pill { background: rgba(8,10,8,.55); border: 1px solid rgba(198,245,74,.45); color: #e7ffb0; font-size: 12px; backdrop-filter: blur(10px); }
+.nowgo { box-shadow: 0 8px 18px rgba(198,245,74,.25); }
+.rec { width: 16px; height: 16px; border-radius: 50%; display: inline-block; margin-right: 8px; background: radial-gradient(circle at 40% 40%, #d6ff6a, #6b8f22 60%, #142006); vertical-align: -2px; }
+.disc { flex-basis: 46%; }
+.disc-score { min-width: 36px; text-align: center; }
+.disc-status.s-abbandonato { color: #ffb4b4; border-color: rgba(255,140,140,.45); }
+.disc-status.s-da_vedere { color: #d6ff6a; }
+.nav { overflow: visible; align-items: center; padding-bottom: 8px; background: rgba(20,20,24,.72); }
+.nav button.orb {
+  width: 72px; height: 72px; margin-top: -34px; border-radius: 50%;
+  background: #1a1c20; color: #fff; border: 5px solid #0c0e10;
+  box-shadow: 0 10px 24px rgba(0,0,0,.45);
+}
+.nav button.orb svg { width: 28px; height: 28px; }
+.nav button[aria-current="page"]:not(.orb) {
+  background: #c6f54a; color: #142006; width: 44px; height: 44px; margin: 0 auto; border-radius: 16px;
+}
+@media (min-width: 960px) {
+  .maincol { max-width: 460px; padding-left: 16px; padding-right: 16px; }
+  .nav button.orb { width: 72px; height: 72px; margin-top: -34px; border-radius: 50%; }
+}
 </style>
 
 </head>
@@ -652,7 +696,7 @@ const I18N = {
     shelf: "Scaffale",
     viewWall: "Locandine",
     viewList: "Elenco",
-    jukebox: "Jukebox",
+    jukebox: "Jukebox collezione",
     jukeboxHint: "Scorri i dischi",
     hoursKicker: "Fino ad ora",
     hoursFilmLine: "{h}h Film ({n} visti)",
@@ -929,7 +973,8 @@ function icon(name) {
     search: '<path fill="currentColor" d="M10.4 3a7.4 7.4 0 0 1 5.9 11.8l3.9 3.9a1.15 1.15 0 0 1-1.63 1.62l-3.9-3.9A7.4 7.4 0 1 1 10.4 3zm0 2.2a5.2 5.2 0 1 0 0 10.4 5.2 5.2 0 0 0 0-10.4z"/>',
     calendar: '<path fill="currentColor" d="M8 2.6a1.1 1.1 0 0 1 1.1 1.1V5h5.8V3.7a1.1 1.1 0 1 1 2.2 0V5H19a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h1.9V3.7A1.1 1.1 0 0 1 8 2.6zM5 9.2V19h14V9.2H5zm2.2 3.1h2.3v2.2H7.2v-2.2zm4.1 0h2.3v2.2h-2.3v-2.2z"/>',
     chart: '<path fill="currentColor" d="M3 20.2a1.1 1.1 0 0 1 0-2.2h1.2V11a1.2 1.2 0 0 1 2.4 0v7h2.2V6.2a1.2 1.2 0 0 1 2.4 0V18h2.2v-5.2a1.2 1.2 0 1 1 2.4 0V18H20a1.1 1.1 0 1 1 0 2.2H3z"/>',
-    gear: '<path fill="currentColor" d="M10.2 2.8h3.6l.4 2.1a7.2 7.2 0 0 1 1.8.9l1.9-1 2.5 2.5-1 1.9c.4.6.7 1.2.9 1.8l2.1.4v3.6l-2.1.4a7.2 7.2 0 0 1-.9 1.8l1 1.9-2.5 2.5-1.9-1a7.2 7.2 0 0 1-1.8.9l-.4 2.1h-3.6l-.4-2.1a7.2 7.2 0 0 1-1.8-.9l-1.9 1-2.5-2.5 1-1.9a7.2 7.2 0 0 1-.9-1.8l-2.1-.4V10.9l2.1-.4c.2-.6.5-1.2.9-1.8l-1-1.9 2.5-2.5 1.9 1c.6-.4 1.2-.7 1.8-.9l.4-2.1zM12 9.1a2.9 2.9 0 1 0 0 5.8 2.9 2.9 0 0 0 0-5.8z"/>'
+    gear: '<path fill="currentColor" d="M10.2 2.8h3.6l.4 2.1a7.2 7.2 0 0 1 1.8.9l1.9-1 2.5 2.5-1 1.9c.4.6.7 1.2.9 1.8l2.1.4v3.6l-2.1.4a7.2 7.2 0 0 1-.9 1.8l1 1.9-2.5 2.5-1.9-1a7.2 7.2 0 0 1-1.8.9l-.4 2.1h-3.6l-.4-2.1a7.2 7.2 0 0 1-1.8-.9l-1.9 1-2.5-2.5 1-1.9a7.2 7.2 0 0 1-.9-1.8l-2.1-.4V10.9l2.1-.4c.2-.6.5-1.2.9-1.8l-1-1.9 2.5-2.5 1.9 1c.6-.4 1.2-.7 1.8-.9l.4-2.1zM12 9.1a2.9 2.9 0 1 0 0 5.8 2.9 2.9 0 0 0 0-5.8z"/>',
+    spark: '<defs><linearGradient id="spark" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#5eead4"/><stop offset=".45" stop-color="#38bdf8"/><stop offset="1" stop-color="#e879f9"/></linearGradient></defs><path fill="url(#spark)" d="M12 1.8 13.7 8.4 20.2 10 13.7 11.6 12 18.2 10.3 11.6 3.8 10l6.5-1.6z"/>'
   };
   return `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[name] || ""}</svg>`;
 }
@@ -1475,18 +1520,16 @@ function toast(msg) {
 function paintChrome() {
   const route = state.route.name === "list" ? "library" : state.route.name === "goals" ? "stats" : state.route.name === "detail" ? "library" : state.route.name;
   const items = [
-    ["library", "#/", "library", "navLibrary"],
-    ["search", "#/cerca", "search", "navSearch"],
-    ["upcoming", "#/uscite", "calendar", "navUpcoming"],
-    ["stats", "#/numeri", "chart", "navStats"],
-    ["settings", "#/impostazioni", "gear", "navSettingsShort"]
+    ["library", "#/", "library", "navLibrary", ""],
+    ["search", "#/cerca", "search", "navSearch", ""],
+    ["upcoming", "#/uscite", "spark", "navUpcoming", "orb"],
+    ["stats", "#/numeri", "chart", "navStats", ""],
+    ["settings", "#/impostazioni", "gear", "navSettingsShort", ""]
   ];
   document.getElementById("nav").innerHTML =
-    `<div class="navbrand"><img src="icon-192.png" alt=""><div><span>${esc(t("eyebrow"))}</span><strong>Cineteca</strong></div></div>` +
-    items.map(([id, hash, ic, key]) =>
-      `<button type="button" data-act="nav" data-hash="${hash}" ${route === id ? 'aria-current="page"' : ""}>${icon(ic)}<span>${esc(t(key))}</span></button>`
-    ).join("") +
-    `<p class="navfoot">${esc(t("navFoot"))}</p>`;
+    items.map(([id, hash, ic, key, extra]) =>
+      `<button type="button" class="${extra}" data-act="nav" data-hash="${hash}" ${route === id ? 'aria-current="page"' : ""}>${icon(ic)}<span>${esc(t(key))}</span></button>`
+    ).join("");
   if (!state.syncText) state.syncText = sheetUrl() && settings.token ? t("syncIdle") : t("syncOff");
   paintSync();
 }
@@ -1735,7 +1778,10 @@ function hoursHtml() {
     </div>
     <div class="hours-mid">
       <p class="hours-num"><b>${esc(formatHours(mins))}</b> <span>${esc(t("hoursUnit"))}</span></p>
-      <span class="splitbar" aria-hidden="true"><i class="film" style="width:${filmPct}%"></i><i class="tv" style="width:${100 - filmPct}%"></i></span>
+      <span class="hours-split">
+        <span class="splitlabs"><span>Film</span><span>Serie</span></span>
+        <span class="splitbar" aria-hidden="true"><i class="film" style="width:${filmPct}%"></i><i class="tv" style="width:${100 - filmPct}%"></i></span>
+      </span>
     </div>
     <p class="hours-detail">${esc(detail)}</p>
   </section>`;
@@ -1804,6 +1850,7 @@ function libraryHtml() {
   if (!has && state.route.name !== "list") return emptyLobbyHtml();
   const heading = state.route.name === "list" ? state.route.list : "";
   return `
+    <header class="mast"><span class="mark">C</span><span class="mastname"><strong>Cineteca</strong><small>${esc(t("eyebrow"))}</small></span><span class="onlinetag${navigator.onLine ? "" : " off"}">${navigator.onLine ? "Online" : "Offline"}</span></header>
     ${heading ? `<p class="eyebrow">${esc(t("lists"))}</p><h2>${esc(heading)}</h2>` : ""}
     ${state.route.name === "list" ? `<p><button class="btn ghost" type="button" data-act="delete-list" data-name="${esc(state.route.list)}">${esc(t("deleteList"))}</button></p>` : ""}
     ${homeStageHtml(rows)}
@@ -1850,7 +1897,7 @@ function homeShelfHtml(rows) {
   const hero = following[0] || list[0];
   const catalog = list.filter((i) => i.id !== hero.id);
   if (!catalog.length) return "";
-  return `<div class="jukehead"><h3>${esc(t("jukebox"))}</h3><span class="tiny">${esc(t("jukeboxHint"))}</span></div><div class="coverflow" id="coverflow">${catalog.map(discHtml).join("")}</div>`;
+  return `<div class="jukehead"><h3><i class="rec"></i>${esc(t("jukebox"))}</h3><span class="tiny">${esc(t("jukeboxHint"))} ‹ ›</span></div><div class="coverflow" id="coverflow">${catalog.map(discHtml).join("")}</div>`;
 }
 function discHtml(item) {
   const p = item.kind === "tv" ? episodeProgress(item) : null;
@@ -1859,7 +1906,7 @@ function discHtml(item) {
   return `<button class="disc" type="button" data-act="open" data-id="${esc(item.id)}">
     <span class="disc-art"><span class="tile-poster">${posterInner(item.posterPath, item.title)}
       ${score ? `<em class="disc-score">${esc(score)}</em>` : ""}
-      <em class="disc-status">${esc(t("st_" + item.status))}</em>
+      <em class="disc-status s-${esc(item.status)}">${esc(t("st_" + item.status))}</em>
     </span></span>
     <b>${esc(item.title || t("none"))}</b>
     <span class="meta">${esc(meta)}</span>
@@ -1873,7 +1920,7 @@ function featureGlass(item) {
   const frac = p && (p.total || p.seen) ? `${p.seen}/${p.total || p.seen}` : (item.year || "");
   const joke = t("joke" + ((item.title || "").length % 4));
   const pct = progressPct(item);
-  const ep = p && (p.total || p.seen) ? t("episodeProgress", p) : (item.year || "");
+  const ep = p && (p.total || p.seen) ? `Ep. ${p.seen} di ${p.total || p.seen}` : (item.year || "");
   return `<button class="glassfeat nowcard" type="button" data-act="open" data-id="${esc(item.id)}">
     <span class="glassfeat-art"><span class="tile-poster">${posterInner(item.posterPath, item.title)}</span>
       <span class="nowshade"></span>
