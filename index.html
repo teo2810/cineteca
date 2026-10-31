@@ -31,8 +31,11 @@ html[data-theme="light"] { --bg: #0e0e10; }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  background: #0e0e10;
-  color: var(--ink);
+  background:
+    radial-gradient(520px 380px at 80% -10%, rgba(236, 72, 153, 0.42), transparent 58%),
+    radial-gradient(460px 340px at 0% 12%, rgba(139, 92, 246, 0.38), transparent 55%),
+    #141018;
+  color: #f7f4fb;
   font-family: var(--sans);
   font-size: 16px;
   line-height: 1.45;
@@ -46,36 +49,38 @@ img { max-width: 100%; }
 .shell { min-height: 100vh; }
 .nav {
   position: fixed;
-  left: 0; right: 0; bottom: 0;
-  transform: none;
-  width: auto;
+  left: 50%;
+  right: auto;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(420px, calc(100% - 28px));
   z-index: 20;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  padding: 4px 2px calc(4px + env(safe-area-inset-bottom));
-  border-radius: 0;
-  background: #111113;
-  color: #f5f5f6;
-  border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: none;
-  backdrop-filter: none;
+  padding: 8px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f7f4fb;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(22px) saturate(1.4);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
 }
 .navbrand, .navfoot { display: none; }
 .nav button {
   position: relative;
   appearance: none; -webkit-appearance: none;
-  min-width: 0; min-height: 52px; border: 0; border-radius: 12px; background: transparent;
-  color: rgba(245, 245, 246, 0.45);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 3px; padding: 4px 0; font-size: 10px; font-weight: 600;
+  min-width: 0; min-height: 46px; border: 0; border-radius: 18px; background: transparent;
+  color: rgba(247, 244, 251, 0.62);
+  display: flex; align-items: center; justify-content: center;
+  padding: 0;
 }
-.nav button span { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.nav button[aria-current="page"] { background: transparent; color: #fff; }
-.nav button[aria-current="page"] svg { color: #c6f54a; }
+.nav button span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.nav button[aria-current="page"] { background: rgba(255, 255, 255, 0.16); color: #fff; }
+.nav button[aria-current="page"] svg { color: #fff; }
 .nav button[aria-current="page"]::after { display: none; }
 .nav svg { width: 22px; height: 22px; display: block; }
-.maincol { padding: 0 16px calc(76px + env(safe-area-inset-bottom)); max-width: 1120px; margin: 0 auto; }
+.maincol { padding: 0 16px calc(108px + env(safe-area-inset-bottom)); max-width: 440px; margin: 0 auto; }
 .top {
   position: sticky; top: 0; z-index: 10;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -293,40 +298,23 @@ details.filters summary { min-height: 44px; display: flex; align-items: center; 
   .lobby h2 { font-size: 64px; }
 }
 @media (min-width: 960px) {
-  .shell { display: grid; grid-template-columns: 252px 1fr; }
+  .shell { display: block; }
   .nav {
-    position: sticky; top: 0; left: auto; right: auto; bottom: auto;
-    transform: none;
-    width: 252px; height: 100vh;
-    display: flex; flex-direction: column; align-items: stretch;
-    grid-template-columns: none;
-    border-radius: 0; padding: 22px 14px 18px;
-    background: rgba(12, 10, 18, 0.72); box-shadow: none;
-    backdrop-filter: blur(18px);
+    position: fixed; top: auto; left: 50%; right: auto; bottom: calc(18px + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    width: min(420px, calc(100% - 32px)); height: auto;
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    border-radius: 28px; padding: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(22px) saturate(1.4);
   }
-  .navbrand { display: flex; align-items: center; gap: 12px; padding: 2px 8px 18px; color: #f6f1e8; }
-  .navbrand img { width: 44px; height: 44px; border-radius: 14px; }
-  .navbrand strong { display: block; font-family: var(--sans); font-size: 24px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
-  .navbrand span { display: block; margin-top: 4px; color: #e9a0ff; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; }
-  .nav button {
-    flex-direction: row; justify-content: flex-start; gap: 12px;
-    min-height: 52px; font-size: 16px; padding: 0 14px; border-radius: 16px; color: rgba(247, 244, 251, 0.55);
-  }
-  .nav button span { display: inline; }
-  .nav button[aria-current="page"] {
-    background: rgba(255, 255, 255, 0.14); color: #fff;
-    box-shadow: none;
-  }
-  .nav button[aria-current="page"] svg { color: #c8f54a; }
-  .navfoot { display: block; margin-top: auto; padding: 16px 10px 4px; color: #8d8073; font-size: 13px; line-height: 1.4; }
-  .brand { display: none; }
-  .top { justify-content: flex-end; background: transparent; border: 0; box-shadow: none; }
-  .maincol { padding: 8px 36px 56px; }
-  .toast { left: 276px; right: auto; max-width: 420px; bottom: 24px; }
-  .billboard { margin-left: 0; margin-right: 0; border-radius: 28px; }
-  .billboard-body { grid-template-columns: 180px 1fr; min-height: 280px; align-items: end; }
-  .hero-poster { width: 180px; }
-  .billboard h2 { font-size: 52px; }
+  .navbrand, .navfoot { display: none; }
+  .brand { display: flex; }
+  .nav button { flex-direction: row; justify-content: center; min-height: 46px; font-size: 0; padding: 0; border-radius: 18px; }
+  .nav button span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .top { justify-content: flex-end; background: transparent; }
+  .maincol { padding: 8px 16px calc(120px + env(safe-area-inset-bottom)); max-width: 440px; }
+  .toast { left: 16px; right: 16px; bottom: 100px; }
 }
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; }
@@ -445,6 +433,38 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
 @media (min-width: 720px) {
   .posters { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 }
+.glassseg {
+  display: flex; width: fit-content; max-width: 100%; margin: 8px auto 16px; padding: 4px;
+  border-radius: 999px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(16px);
+}
+.glassseg button {
+  border: 0; background: transparent; color: rgba(247,244,251,.7);
+  min-height: 36px; padding: 0 16px; border-radius: 999px; font-weight: 600; font-size: 14px;
+}
+.glassseg button[aria-pressed="true"] { background: rgba(255,255,255,.18); color: #fff; }
+.glassfeat, .glassrow {
+  width: 100%; display: block; text-align: left; color: inherit; border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.07); border-radius: 28px; overflow: hidden; margin: 0 0 14px;
+  backdrop-filter: blur(18px); padding: 0;
+}
+.glassfeat-art { display: block; width: 100%; }
+.glassfeat-art .tile-poster { width: 100%; aspect-ratio: 16 / 10; border-radius: 0; box-shadow: none; }
+.glassfeat-art .tile-poster img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+.glassfeat-body { display: block; padding: 14px 16px 16px; }
+.glassfeat h2 { margin: 8px 0; font-size: 28px; }
+.glassmeta { display: flex; align-items: center; gap: 10px; }
+.glassfeat-foot { display: flex; justify-content: space-between; margin-top: 12px; color: rgba(247,244,251,.8); font-weight: 600; }
+.glassfeat-foot .go { color: #fff; }
+.glassrow { display: flex; align-items: center; gap: 12px; padding: 10px; }
+.glassrow-art { width: 64px; flex: 0 0 auto; }
+.glassrow-art .tile-poster { width: 64px; height: 64px; aspect-ratio: 1; border-radius: 18px; }
+.glassrow-mid { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.glassrow-mid b { font-size: 16px; }
+.countline { display: flex; gap: 14px; flex-wrap: wrap; margin: 0 0 14px; color: #c9bdd6; font-size: 14px; }
+.countline b { color: #fff; }
+.row { border-radius: 22px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); }
+.top { background: transparent; border: 0; backdrop-filter: none; }
 </style>
 
 </head>
@@ -521,6 +541,7 @@ const I18N = {
     statEps: "Episodi visti",
     emptyFilter: "Nessun titolo con questi filtri.",
     goSearch: "Cerca un titolo",
+    openTitle: "Apri",
     st_visto: "Visto",
     st_da_vedere: "Da vedere",
     st_in_corso: "In corso",
@@ -1514,8 +1535,8 @@ function figuresHtml(items) {
   const rated = titles.filter((i) => i.rating !== null);
   const avg = rated.length ? rated.reduce((sum, i) => sum + i.rating, 0) / rated.length : null;
   const eps = titles.reduce((n, i) => n + episodeProgress(i).seen, 0);
-  const cell = (n, label) => `<span><b>${esc(n)}</b>${esc(label)}</span>`;
-  return `<div class="statpills">${cell(titles.length, t("statTitles"))}${cell(avg === null ? "—" : formatScore(Math.round(avg * 10) / 10), t("statAvg"))}${cell(eps, t("statEps"))}</div>`;
+  const cell = (n, label) => `<span>${esc(label)} <b>${esc(n)}</b></span>`;
+  return `<p class="countline">${cell(titles.length, t("statTitles"))}${cell(avg === null ? "—" : formatScore(Math.round(avg * 10) / 10), t("statAvg"))}${cell(eps, t("statEps"))}</p>`;
 }
 function demoBannerHtml() {
   if (!hasDemo()) return "";
@@ -1567,8 +1588,11 @@ function libraryHtml() {
   if (!has && state.route.name !== "list") return emptyLobbyHtml();
   const heading = state.route.name === "list" ? state.route.list : "";
   return `
-    ${heading ? `<p class="eyebrow">${esc(t("lists"))}</p><h2>${esc(heading)}</h2>` : `<h2>${esc(t("libraryTitle"))}</h2>`}
+    ${heading ? `<p class="eyebrow">${esc(t("lists"))}</p><h2>${esc(heading)}</h2>` : ""}
     ${state.route.name === "list" ? `<p><button class="btn ghost" type="button" data-act="delete-list" data-name="${esc(state.route.list)}">${esc(t("deleteList"))}</button></p>` : ""}
+    <div class="seg glassseg" role="group" aria-label="${esc(t("filters"))}">
+      ${["tutti", "movie", "tv"].map((k) => `<button type="button" data-act="kind" data-kind="${k}" aria-pressed="${state.f.kind === k}">${esc(k === "tutti" ? t("kindAll") : k === "movie" ? t("kindMovie") : t("kindTv"))}</button>`).join("")}
+    </div>
     ${demoBannerHtml()}
     ${has ? figuresHtml(state.items) : ""}
     <div class="toolbar">
@@ -1576,10 +1600,7 @@ function libraryHtml() {
       <div class="chips statusline">
         ${[["tutti", t("statusAll")], ...STATUSES.map((s) => [s, t("st_" + s)])].map(([s, label]) => `<button type="button" class="chip" data-act="set-filter" data-status="${s}" aria-pressed="${state.f.status === s}">${esc(label)}</button>`).join("")}
       </div>
-      <div class="seg" role="group" aria-label="${esc(t("filters"))}">
-        ${["tutti", "movie", "tv"].map((k) => `<button type="button" class="chip" data-act="kind" data-kind="${k}" aria-pressed="${state.f.kind === k}">${esc(k === "tutti" ? t("kindAll") : k === "movie" ? t("kindMovie") : t("kindTv"))}</button>`).join("")}
-        <button type="button" class="chip" data-act="viewmode" aria-pressed="${state.f.view === "wall"}">${esc(state.f.view === "wall" ? t("viewList") : t("viewWall"))}</button>
-      </div>
+      <button type="button" class="chip" data-act="viewmode" aria-pressed="${state.f.view === "wall"}">${esc(state.f.view === "wall" ? t("viewList") : t("viewWall"))}</button>
       ${lists.length ? `<div class="chips">${lists.map((list) => `<button type="button" class="chip" data-act="open-list" data-name="${esc(list.name)}" aria-pressed="${state.route.name === "list" && state.route.list === list.name}">${esc(list.name)}</button>`).join("")}</div>` : ""}
       <details class="filters">
         <summary>${esc(t("filters"))}</summary>
@@ -1606,24 +1627,33 @@ function libraryItemsHtml(rows) {
   const list = rows || visibleTitles();
   if (!titlesOf(state.items).length) return `<div class="empty">${esc(t("emptyLibrary"))}</div>`;
   if (!list.length) return `<div class="empty">${esc(t("emptyFilter"))}</div>`;
-  const showRails = !filtersActive() && state.f.view !== "list";
-  const rails = showRails ? railsHtml() : "";
-  const railIds = new Set();
-  if (showRails) {
-    titlesOf(state.items).forEach((i) => {
-      if (i.status === "in_corso" || i.status === "da_vedere") railIds.add(i.id);
-    });
-  }
-  const wallRows = showRails ? list.filter((i) => !railIds.has(i.id)) : list;
-  if (state.f.view === "list") return `<div class="rowlist">${list.map(rowHtml).join("")}</div>`;
-  const grid = wallRows.length ? `<h3>${esc(t("shelf"))}</h3><div class="posters">${wallRows.map(tileHtml).join("")}</div>` : "";
-  return `${rails}${grid}`;
+  if (state.f.view === "list") return `<div class="glasslist">${list.map(glassRow).join("")}</div>`;
+  const hero = !filtersActive() ? pickHero() : null;
+  const rest = hero ? list.filter((i) => i.id !== hero.id) : list;
+  return `${hero ? featureGlass(hero) : ""}<div class="glasslist">${rest.map(glassRow).join("")}</div>`;
 }
-function railsHtml() {
-  const now = titlesOf(state.items).filter((i) => i.status === "in_corso").slice(0, 12);
-  const next = titlesOf(state.items).filter((i) => i.status === "da_vedere").slice(0, 12);
-  const rail = (title, items) => items.length ? `<h3>${esc(title)}</h3><div class="rail">${items.map(tileHtml).join("")}</div>` : "";
-  return rail(t("railNow"), now) + rail(t("railNext"), next);
+function featureGlass(item) {
+  const p = item.kind === "tv" ? episodeProgress(item) : null;
+  const frac = p && (p.total || p.seen) ? `${p.seen}/${p.total || p.seen}` : (item.year || "");
+  return `<button class="glassfeat" type="button" data-act="open" data-id="${esc(item.id)}">
+    <span class="glassfeat-art"><span class="tile-poster">${posterInner(item.posterPath, item.title)}</span></span>
+    <span class="glassfeat-body">
+      <span class="pill">${esc(t("st_" + item.status))}</span>
+      <h2>${esc(item.title || t("none"))}</h2>
+      <span class="glassmeta">${scoreBit(item.rating)}<span class="meta">${esc(item.kind === "tv" ? t("tv") : t("movie"))}</span></span>
+      <span class="glassfeat-foot"><span>${esc(frac)}</span><span class="go">${esc(t("openTitle"))} ›</span></span>
+    </span>
+  </button>`;
+}
+function glassRow(item) {
+  const p = item.kind === "tv" ? episodeProgress(item) : null;
+  const meta = p && (p.total || p.seen) ? t("episodeProgress", p) : [item.year, t("st_" + item.status)].filter(Boolean).join(" · ");
+  const center = item.kind === "tv" ? String(progressPct(item)) : (item.rating == null ? "—" : formatScore(item.rating));
+  return `<button class="glassrow" type="button" data-act="open" data-id="${esc(item.id)}">
+    <span class="glassrow-art"><span class="tile-poster">${posterInner(item.posterPath, item.title)}</span></span>
+    <span class="glassrow-mid"><b>${esc(item.title || t("none"))}</b><span class="meta">${esc(meta)}</span></span>
+    ${ringHtml(progressPct(item), center)}
+  </button>`;
 }
 function showCardHtml(item) {
   return `<button class="showcard" type="button" data-act="open" data-id="${esc(item.id)}">
