@@ -665,6 +665,28 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
   .maincol { max-width: 460px; padding-left: 16px; padding-right: 16px; }
   .nav { background: rgba(255, 255, 255, 0.14); }
 }
+.nav .logo { width: 28px; height: 28px; display: block; }
+.nowcard { transition: transform .16s ease; }
+.nowcard:active { transform: scale(1.04); }
+.disc { flex-basis: 31%; transition: transform .16s ease; }
+.coverflow { padding: 12px 2px 28px; gap: 10px; }
+.sheetback { position: fixed; inset: 0; z-index: 40; }
+.sheetcatch { position: absolute; inset: 0; border: 0; background: rgba(0,0,0,.28); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto; width: min(460px, 100%);
+  background: #16181d; border: 1px solid rgba(255,255,255,.12); border-bottom: 0;
+  border-radius: 28px 28px 0 0; padding: 22px 16px calc(16px + env(safe-area-inset-bottom));
+  box-shadow: 0 -24px 60px rgba(0,0,0,.5);
+}
+.sheethead { display: grid; grid-template-columns: 86px 1fr; gap: 14px; align-items: center; position: relative; }
+.sheetposter .tile-poster, .sheetposter img { width: 86px; height: 118px; border-radius: 16px; object-fit: cover; }
+.sheethead h2 { margin: 0 28px 4px 0; font-size: 26px; }
+.sheetscore { display: inline-flex; margin-top: 8px; background: #c6f54a; color: #142006; font-weight: 800; border-radius: 999px; padding: 3px 10px; }
+.sheetquote { margin: 14px 0; background: rgba(255,255,255,.06); border-radius: 16px; padding: 12px 14px; color: #c8c8cc; font-style: italic; }
+.sheetclose { width: 100%; min-height: 52px; border-radius: 999px; font-weight: 800; }
+.sheetx { position: absolute; top: 0; right: 0; width: 34px; height: 34px; border-radius: 50%; border: 0; background: #2a2c31; color: #fff; }
+.textlink { border: 0; background: transparent; color: inherit; padding: 0; font: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.sheetcard { margin-bottom: 14px; }
 </style>
 
 </head>
@@ -727,6 +749,8 @@ const I18N = {
     viewWall: "Locandine",
     viewList: "Elenco",
     jukebox: "Jukebox collezione",
+    closeSheet: "Chiudi scheda",
+    fullSheet: "Scheda completa",
     jukeboxHint: "Scorri i dischi",
     hoursKicker: "Fino ad ora",
     hoursFilmLine: "{h}h Film ({n} visti)",
@@ -953,6 +977,7 @@ let settings = { tmdbKey: "", scriptUrl: "", token: "", region: "IT", theme: "au
 const state = {
   items: [],
   route: { name: "library" },
+  sheet: null,
   detail: null,
   detailInLibrary: false,
   detailWasDeleted: false,
@@ -996,6 +1021,9 @@ function esc(s) {
     .replace(/>/g, "\u0026gt;")
     .replace(/"/g, "\u0026quot;")
     .replace(/'/g, "&#39;");
+}
+function logoSvg() {
+  return `<svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><path fill="none" stroke="#c6f54a" stroke-width="9" stroke-linecap="round" d="M47 15a20 20 0 1 0 .2 34"/><g fill="#14181c"><circle cx="34" cy="13" r="2.2"/><circle cx="21" cy="17" r="2.2"/><circle cx="13" cy="26" r="2.2"/><circle cx="13" cy="38" r="2.2"/><circle cx="21" cy="47" r="2.2"/><circle cx="34" cy="51" r="2.2"/></g><path fill="#c6f54a" d="M25 26.2 39 32 25 37.8z"/></svg>`;
 }
 function icon(name) {
   const paths = {
@@ -1558,7 +1586,7 @@ function paintChrome() {
   ];
   document.getElementById("nav").innerHTML =
     items.map(([id, hash, ic, key, extra]) =>
-      `<button type="button" class="${extra}" data-act="nav" data-hash="${hash}" ${route === id ? 'aria-current="page"' : ""}>${icon(ic)}<span>${esc(t(key))}</span></button>`
+      `<button type="button" class="${extra}" data-act="nav" data-hash="${hash}" ${route === id ? 'aria-current="page"' : ""}>${id === "library" ? logoSvg() : icon(ic)}<span>${esc(t(key))}</span></button>`
     ).join("");
   if (!state.syncText) state.syncText = sheetUrl() && settings.token ? t("syncIdle") : t("syncOff");
   paintSync();
@@ -1566,23 +1594,29 @@ function paintChrome() {
 function bindCoverflow() {
   const el = document.getElementById("coverflow");
   if (!el) return;
+  let pressed = null;
   const tick = () => {
     const mid = el.getBoundingClientRect().left + el.clientWidth / 2;
     for (const disc of el.querySelectorAll(".disc")) {
       const r = disc.getBoundingClientRect();
       const delta = (r.left + r.width / 2 - mid) / Math.max(1, el.clientWidth);
-      const ry = Math.max(-36, Math.min(36, delta * 46));
-      const scale = Math.max(0.88, 1 - Math.abs(delta) * 0.22);
+      const ry = Math.max(-28, Math.min(28, delta * 36));
+      let scale = Math.max(0.9, 1.1 - Math.abs(delta) * 0.42);
+      if (disc === pressed) scale *= 1.06;
       disc.style.transform = `rotateY(${(-ry).toFixed(1)}deg) scale(${scale.toFixed(3)})`;
     }
   };
+  el.addEventListener("pointerdown", (e) => { pressed = e.target.closest(".disc"); tick(); });
+  const release = () => { pressed = null; tick(); };
+  el.addEventListener("pointerup", release);
+  el.addEventListener("pointercancel", release);
   el.addEventListener("scroll", tick, { passive: true });
   tick();
 }
 function paint(opts) {
   const keep = opts && opts.keepScroll;
   const y = keep ? window.scrollY : 0;
-  document.getElementById("view").innerHTML = viewHtml();
+  document.getElementById("view").innerHTML = viewHtml() + sheetHtml();
   paintChrome();
   bindCoverflow();
   const titles = { library: "libraryTitle", list: "lists", search: "searchTitle", upcoming: "upcomingTitle", stats: "statsTitle", goals: "goalsTitle", settings: "settingsTitle", detail: "libraryTitle" };
@@ -1880,7 +1914,6 @@ function libraryHtml() {
   if (!has && state.route.name !== "list") return emptyLobbyHtml();
   const heading = state.route.name === "list" ? state.route.list : "";
   return `
-    <header class="mast"><span class="mark">C</span><span class="mastname"><strong>Cineteca</strong><small>${esc(t("eyebrow"))}</small></span><span class="onlinetag${navigator.onLine ? "" : " off"}">${navigator.onLine ? "Online" : "Offline"}</span></header>
     ${heading ? `<p class="eyebrow">${esc(t("lists"))}</p><h2>${esc(heading)}</h2>` : ""}
     ${state.route.name === "list" ? `<p><button class="btn ghost" type="button" data-act="delete-list" data-name="${esc(state.route.list)}">${esc(t("deleteList"))}</button></p>` : ""}
     ${homeStageHtml()}
@@ -2064,6 +2097,38 @@ function archiveStrip() {
   return `<h3>${esc(t("inArchive"))}</h3><div class="posters">${recent.map(tileHtml).join("")}</div>`;
 }
 
+function blurb(item) {
+  const raw = String(item.notes || item.overview || "").trim();
+  if (!raw) return "";
+  return raw.length > 140 ? raw.slice(0, 137) + "…" : raw;
+}
+function peekHead(item, mode) {
+  const quote = blurb(item);
+  const score = item.rating != null ? `<span class="sheetscore">${esc(formatScore(item.rating))}</span>` : "";
+  const year = item.year ? esc(item.year) : "";
+  const tail = mode === "sheet"
+    ? `<button type="button" class="textlink" data-act="full-sheet">${esc(t("fullSheet"))}</button>`
+    : esc(item.kind === "tv" ? t("tv") : t("movie"));
+  return `<div class="sheethead">
+      <span class="sheetposter">${posterInner(item.posterPath, item.title)}</span>
+      <div>
+        <h2>${esc(item.title || t("none"))}</h2>
+        <p class="meta">${year}${year ? " · " : ""}${tail}</p>
+        ${score}
+      </div>
+    </div>
+    ${quote ? `<p class="sheetquote">“${esc(quote)}”</p>` : ""}`;
+}
+function sheetHtml() {
+  if (!state.sheet || state.route.name === "detail") return "";
+  const item = state.items.find((i) => i.id === state.sheet && !i.del);
+  if (!item) return "";
+  return `<div class="sheetback"><button class="sheetcatch" type="button" data-act="close-sheet" aria-label="${esc(t("closeSheet"))}"></button><div class="sheet" role="dialog" aria-modal="true">
+      <button class="sheetx" type="button" data-act="close-sheet" aria-label="${esc(t("closeSheet"))}">×</button>
+      ${peekHead(item, "sheet")}
+      <button class="btn sheetclose" type="button" data-act="close-sheet">${esc(t("closeSheet"))}</button>
+    </div></div>`;
+}
 function detailHtml() {
   if (state.detailLoading) return `<p class="lead">${esc(t("detailLoading"))}</p>`;
   if (state.detailError) return `<p class="banner">${esc(state.detailError)}</p><button class="btn ghost" type="button" data-act="back">${esc(t("back"))}</button>`;
@@ -2073,19 +2138,8 @@ function detailHtml() {
   const progress = item.kind === "tv" ? episodeProgress(item) : null;
   const bg = posterUrl(item.posterPath);
   return `
-    <div class="billboard">
-      <div class="billboard-bg" style="${bg ? `background-image:url('${esc(bg)}')` : ""}"></div>
-      <div class="billboard-body">
-        <span class="hero-poster">${posterInner(item.posterPath, item.title)}</span>
-        <div>
-          <p><button class="btn ghost" type="button" data-act="back">${esc(t("back"))}</button></p>
-          <h2>${esc(item.title)}</h2>
-          ${item.originalTitle && item.originalTitle !== item.title ? `<p class="tiny">${esc(item.originalTitle)}</p>` : ""}
-          <p class="meta">${esc([item.kind === "tv" ? t("tv") : t("movie"), item.year, item.runtime ? t("minutes", { n: item.runtime }) : "", item.releaseDate ? formatDay(item.releaseDate) : ""].filter(Boolean).join(" · "))}</p>
-          <p class="meta">${esc((item.genres || []).join(" · "))}</p>
-        </div>
-      </div>
-    </div>
+    <p><button class="btn ghost" type="button" data-act="back">${esc(t("back"))}</button></p>
+    <section class="card sheetcard">${peekHead(item, "page")}</section>
     ${item.overview ? `<p class="lead">${esc(item.overview)}</p>` : `<p class="tiny">${esc(t("overviewEmpty"))}</p>`}
     ${item.directors && item.directors.length ? `<p class="tiny">${esc(peopleLabel)}: ${esc(item.directors.map((d) => d.name).join(", "))}</p>` : ""}
     ${item.countries && item.countries.length ? `<p class="tiny">${esc(t("countries"))}: ${esc(item.countries.join(", "))}</p>` : ""}
@@ -2695,7 +2749,21 @@ async function onAct(act, el, ev) {
     else go("#/");
     return;
   }
-  if (act === "open") { go("#/titolo/" + encodeURIComponent(el.dataset.id)); return; }
+  if (act === "open") {
+    const id = el.dataset.id;
+    const item = state.items.find((i) => i.id === id && !i.del);
+    if (!item || state.route.name === "detail") { go("#/titolo/" + encodeURIComponent(id)); return; }
+    state.sheet = id;
+    paint({ keepScroll: true });
+    return;
+  }
+  if (act === "close-sheet") { state.sheet = null; paint({ keepScroll: true }); return; }
+  if (act === "full-sheet") {
+    const id = state.sheet;
+    state.sheet = null;
+    if (id) go("#/titolo/" + encodeURIComponent(id));
+    return;
+  }
   if (act === "open-list") { go("#/lista/" + encodeURIComponent(el.dataset.name)); return; }
   if (act === "kind") {
     state.f.kind = el.dataset.kind;
