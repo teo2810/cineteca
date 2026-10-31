@@ -768,6 +768,17 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
   .nav { width: min(372px, 90%); height: 70px; bottom: 20px; border-radius: 35px; background: rgba(18, 18, 22, 0.85); }
   .disc { flex-basis: 160px; }
 }
+.hours-top { flex-wrap: nowrap; }
+.hours-kicker { white-space: nowrap; font-size: 11px; letter-spacing: 0.04em; }
+.hourpills { flex-wrap: nowrap; }
+.hourpills button { white-space: nowrap; padding: 6px 8px; font-size: 12px; }
+.searchpill { flex-wrap: nowrap; }
+.searchpill input { flex: 1; width: 0; min-width: 0; height: 46px; text-align: left; }
+.coverflow { gap: 10px; padding: 8px 0 4px; scroll-snap-type: none; }
+.disc { flex: 0 0 calc((100% - 20px) / 3); width: auto; }
+.disc-art .tile-poster { width: 100%; height: auto; aspect-ratio: 2 / 3; }
+.maincol { padding-bottom: calc(128px + env(safe-area-inset-bottom)); }
+.ticket { margin-top: 16px; }
 </style>
 
 </head>
@@ -1682,11 +1693,8 @@ function bindCoverflow() {
       const r = disc.getBoundingClientRect();
       const delta = (r.left + r.width / 2 - mid) / Math.max(1, el.clientWidth);
       const ad = Math.abs(delta);
-      const on = ad < 0.18;
-      let scale = on ? 1 : 0.9;
-      if (disc === pressed) scale *= 1.04;
-      disc.style.transform = `scale(${scale.toFixed(3)})`;
-      disc.style.opacity = on ? "1" : "0.7";
+      disc.style.transform = "scale(1)";
+      disc.style.opacity = "1";
     }
   };
   el.addEventListener("pointerdown", (e) => { pressed = e.target.closest(".disc"); tick(); });
@@ -1999,17 +2007,16 @@ function libraryHtml() {
   return `
     ${heading ? `<p class="eyebrow">${esc(t("lists"))}</p><h2>${esc(heading)}</h2>` : ""}
     ${state.route.name === "list" ? `<p><button class="btn ghost" type="button" data-act="delete-list" data-name="${esc(state.route.list)}">${esc(t("deleteList"))}</button></p>` : ""}
-    <header class="apptitle">${logoSvg()}<h1>Cineteca</h1></header>
     ${homeStageHtml()}
     <label class="searchpill">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10.4 3a7.4 7.4 0 0 1 5.9 11.8l3.9 3.9a1.15 1.15 0 0 1-1.63 1.62l-3.9-3.9A7.4 7.4 0 1 1 10.4 3zm0 2.2a5.2 5.2 0 1 0 0 10.4 5.2 5.2 0 0 0 0-10.4z"/></svg>
       <input id="q" type="search" enterkeyhint="search" placeholder="${esc(t("searchPh"))}" value="${esc(state.f.q)}" autocomplete="off">
     </label>
-    <div id="list">${homeShelfHtml(rows)}</div>
     <div class="chips statusline quick">
       ${[["tutti", t("statusAll")], ...STATUSES.map((s) => [s, t("st_" + s)])].map(([s, label]) => `<button type="button" class="chip" data-act="set-filter" data-status="${s}" aria-pressed="${state.f.status === s}">${esc(label)}</button>`).join("")}
       ${lists.map((list) => `<button type="button" class="chip" data-act="open-list" data-name="${esc(list.name)}" aria-pressed="${state.route.name === "list" && state.route.list === list.name}">${esc(list.name)}</button>`).join("")}
     </div>
+    <div id="list">${homeShelfHtml(rows)}</div>
     ${demoBannerHtml()}
     <details class="filters">
         <summary>${esc(t("filters"))}</summary>
@@ -2031,13 +2038,18 @@ function filtersActive() {
   return !!(state.f.q.trim() || state.f.kind !== "tutti" || state.f.status !== "tutti" || state.f.genre || state.f.tag || state.route.name === "list");
 }
 function homeStageHtml() {
-  return hoursHtml();
+  const all = titlesOf(state.items);
+  const hero = all.find((i) => i.status === "in_corso") || all[0];
+  return `${hoursHtml()}${hero ? `<div class="homestage">${featureGlass(hero)}</div>` : ""}`;
 }
 function homeShelfHtml(rows) {
   const list = rows || [];
   if (!titlesOf(state.items).length) return `<div class="empty">${esc(t("emptyLibrary"))}</div>`;
   if (!list.length) return `<div class="empty">${esc(t("emptyFilter"))}</div>`;
-  return `<div class="coverflow" id="coverflow">${list.map(discHtml).join("")}</div>`;
+  const hero = titlesOf(state.items).find((i) => i.status === "in_corso") || titlesOf(state.items)[0];
+  const catalog = hero ? list.filter((i) => i.id !== hero.id) : list;
+  if (!catalog.length) return "";
+  return `<div class="jukehead"><h3><i class="rec"></i>${esc(t("jukebox"))}</h3><span class="tiny">${esc(t("jukeboxHint"))}</span></div><div class="coverflow" id="coverflow">${catalog.map(discHtml).join("")}</div>`;
 }
 function discHtml(item) {
   const sub = [item.year, (item.genres && item.genres[0]) || (item.kind === "tv" ? t("tv") : t("movie"))].filter(Boolean).join(" · ");
@@ -2045,6 +2057,7 @@ function discHtml(item) {
   return `<button class="disc" type="button" data-act="open" data-id="${esc(item.id)}">
     <span class="disc-art"><span class="tile-poster">${posterInner(item.posterPath, item.title)}
       ${score ? `<em class="disc-score">${esc(score)}</em>` : ""}
+      <em class="disc-status s-${esc(item.status)}">${esc(t("st_" + item.status))}</em>
     </span></span>
     <b>${esc(item.title || t("none"))}</b>
     <span class="sub">${esc(sub)}</span>
