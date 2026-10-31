@@ -32,9 +32,10 @@ html[data-theme="light"] { --bg: #0e0e10; }
 html, body { margin: 0; padding: 0; }
 body {
   background:
-    radial-gradient(520px 380px at 80% -10%, rgba(236, 72, 153, 0.42), transparent 58%),
-    radial-gradient(460px 340px at 0% 12%, rgba(139, 92, 246, 0.38), transparent 55%),
-    #141018;
+    radial-gradient(760px 520px at -8% -12%, rgba(198, 245, 74, 0.42), transparent 58%),
+    radial-gradient(480px 360px at 108% 0%, rgba(167, 139, 250, 0.32), transparent 52%),
+    radial-gradient(420px 280px at 70% 110%, rgba(198, 245, 74, 0.14), transparent 50%),
+    #10140e;
   color: #f7f4fb;
   font-family: var(--sans);
   font-size: 16px;
@@ -313,7 +314,7 @@ details.filters summary { min-height: 44px; display: flex; align-items: center; 
   .nav button { flex-direction: row; justify-content: center; min-height: 46px; font-size: 0; padding: 0; border-radius: 18px; }
   .nav button span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .top { justify-content: flex-end; background: transparent; }
-  .maincol { padding: 8px 16px calc(120px + env(safe-area-inset-bottom)); max-width: 440px; }
+  .maincol { padding: 20px 40px calc(120px + env(safe-area-inset-bottom)); max-width: 1180px; }
   .toast { left: 16px; right: 16px; bottom: 100px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -465,6 +466,26 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
 .countline b { color: #fff; }
 .row { border-radius: 22px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); }
 .top { background: transparent; border: 0; backdrop-filter: none; }
+.hours { margin: 0 0 16px; padding: 16px 16px 14px; border-radius: 24px; background: rgba(198, 245, 74, 0.08); border: 1px solid rgba(198, 245, 74, 0.32); }
+.hours-kicker { margin: 0; color: #d6ff6a; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; }
+.hours-num { margin: 4px 0 10px; }
+.hours-num b { font-size: 46px; line-height: 1; letter-spacing: -0.04em; color: #d6ff6a; }
+.hours-num span { color: #e7ffc2; font-weight: 600; }
+.hourpills { display: flex; gap: 8px; flex-wrap: wrap; }
+.hourpills button { border-radius: 999px; border: 1px solid rgba(198, 245, 74, 0.4); background: transparent; color: #e7ffb0; min-height: 36px; padding: 0 12px; font-weight: 700; }
+.hourpills button[aria-pressed="true"] { background: #c6f54a; color: #142006; border-color: transparent; }
+.followhead { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.followhead h3 { margin: 0; }
+.viewswitch { display: flex; padding: 3px; border-radius: 14px; background: #0c110a; border: 1px dashed rgba(198, 245, 74, 0.7); }
+.viewswitch button { border: 0; background: transparent; color: #c6f54a; min-height: 34px; padding: 0 12px; border-radius: 11px; font-size: 13px; font-weight: 700; }
+.viewswitch button[aria-pressed="true"] { background: #c6f54a; color: #142006; }
+.plainlist .row { background: transparent; border: 0; border-radius: 0; border-bottom: 1px solid rgba(255,255,255,.1); box-shadow: none; }
+.glassfeat .pill { background: rgba(198, 245, 74, 0.16); color: #e7ffb0; }
+@media (min-width: 960px) {
+  .homegrid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 28px; align-items: start; }
+  .homecol { position: sticky; top: 16px; }
+  .glassfeat-art .tile-poster { aspect-ratio: 16 / 11; min-height: 480px; }
+}
 </style>
 
 </head>
@@ -536,6 +557,16 @@ const I18N = {
     shelf: "Scaffale",
     viewWall: "Locandine",
     viewList: "Elenco",
+    hoursKicker: "Fino ad ora",
+    hoursUnit: "ore",
+    hoursAll: "Tutto",
+    hoursMovie: "Solo film",
+    hoursTv: "Solo serie",
+    followEmpty: "Nient'altro aperto.",
+    joke0: "Il divano ha già preso posizione.",
+    joke1: "Ci eri rimasto. Nessuno ha spoilerato.",
+    joke2: "Ancora aperta, come una bottiglia a metà.",
+    joke3: "Questa non l'hai mollata.",
     statTitles: "Titoli",
     statAvg: "Voto medio",
     statEps: "Episodi visti",
@@ -755,7 +786,7 @@ const state = {
   searchQ: "",
   searchResults: [],
   searchMsg: "",
-  f: { q: "", kind: "tutti", status: "tutti", genre: "", tag: "", sort: "updated", view: "wall" },
+  f: { q: "", kind: "tutti", status: "tutti", genre: "", tag: "", sort: "updated", view: "wall", hours: "tutti" },
   openSeasons: new Set(),
   seasonCache: {},
   seasonLoading: new Set(),
@@ -1530,6 +1561,41 @@ function progressPct(item) {
   if (item.rating !== null && item.rating !== undefined) return Math.round(Number(item.rating) * 10);
   return 0;
 }
+function watchedMinutes(items, scope) {
+  let mins = 0;
+  for (const item of titlesOf(items)) {
+    if (scope === "movie" && item.kind !== "movie") continue;
+    if (scope === "tv" && item.kind !== "tv") continue;
+    const rt = Number(item.runtime) || 0;
+    if (!rt) continue;
+    if (item.kind === "movie") {
+      if (item.status === "visto" || item.status === "in_corso" || item.status === "da_rivedere" || item.status === "completato") mins += rt;
+    } else mins += episodeProgress(item).seen * rt;
+  }
+  return mins;
+}
+function formatHours(mins) {
+  const h = mins / 60;
+  if (h <= 0) return "0";
+  if (h < 10) return String(Math.round(h * 10) / 10).replace(".", ",");
+  return String(Math.round(h));
+}
+function hoursHtml() {
+  const scope = state.f.hours || "tutti";
+  const mins = watchedMinutes(state.items, scope);
+  const btn = (id, label) => `<button type="button" data-act="hours" data-scope="${id}" aria-pressed="${scope === id}">${esc(label)}</button>`;
+  return `<section class="hours">
+    <p class="hours-kicker">${esc(t("hoursKicker"))}</p>
+    <p class="hours-num"><b>${esc(formatHours(mins))}</b> <span>${esc(t("hoursUnit"))}</span></p>
+    <div class="hourpills">${btn("tutti", t("hoursAll"))}${btn("movie", t("hoursMovie"))}${btn("tv", t("hoursTv"))}</div>
+  </section>`;
+}
+function viewSwitch() {
+  return `<div class="viewswitch" role="group">
+    <button type="button" data-act="viewmode" data-view="wall" aria-pressed="${state.f.view !== "list"}">${esc(t("viewWall"))}</button>
+    <button type="button" data-act="viewmode" data-view="list" aria-pressed="${state.f.view === "list"}">${esc(t("viewList"))}</button>
+  </div>`;
+}
 function figuresHtml(items) {
   const titles = titlesOf(items);
   const rated = titles.filter((i) => i.rating !== null);
@@ -1590,17 +1656,16 @@ function libraryHtml() {
   return `
     ${heading ? `<p class="eyebrow">${esc(t("lists"))}</p><h2>${esc(heading)}</h2>` : ""}
     ${state.route.name === "list" ? `<p><button class="btn ghost" type="button" data-act="delete-list" data-name="${esc(state.route.list)}">${esc(t("deleteList"))}</button></p>` : ""}
-    <div class="seg glassseg" role="group" aria-label="${esc(t("filters"))}">
-      ${["tutti", "movie", "tv"].map((k) => `<button type="button" data-act="kind" data-kind="${k}" aria-pressed="${state.f.kind === k}">${esc(k === "tutti" ? t("kindAll") : k === "movie" ? t("kindMovie") : t("kindTv"))}</button>`).join("")}
-    </div>
+    <div id="list">${libraryItemsHtml(rows)}</div>
     ${demoBannerHtml()}
-    ${has ? figuresHtml(state.items) : ""}
     <div class="toolbar">
       <input class="field searchline" id="q" type="search" enterkeyhint="search" placeholder="${esc(t("searchPh"))}" value="${esc(state.f.q)}" autocomplete="off">
       <div class="chips statusline">
         ${[["tutti", t("statusAll")], ...STATUSES.map((s) => [s, t("st_" + s)])].map(([s, label]) => `<button type="button" class="chip" data-act="set-filter" data-status="${s}" aria-pressed="${state.f.status === s}">${esc(label)}</button>`).join("")}
       </div>
-      <button type="button" class="chip" data-act="viewmode" aria-pressed="${state.f.view === "wall"}">${esc(state.f.view === "wall" ? t("viewList") : t("viewWall"))}</button>
+      <button type="button" class="chip" data-act="kind" data-kind="movie" aria-pressed="${state.f.kind === "movie"}">${esc(t("kindMovie"))}</button>
+      <button type="button" class="chip" data-act="kind" data-kind="tv" aria-pressed="${state.f.kind === "tv"}">${esc(t("kindTv"))}</button>
+      <button type="button" class="chip" data-act="kind" data-kind="tutti" aria-pressed="${state.f.kind === "tutti"}">${esc(t("kindAll"))}</button>
       ${lists.length ? `<div class="chips">${lists.map((list) => `<button type="button" class="chip" data-act="open-list" data-name="${esc(list.name)}" aria-pressed="${state.route.name === "list" && state.route.list === list.name}">${esc(list.name)}</button>`).join("")}</div>` : ""}
       <details class="filters">
         <summary>${esc(t("filters"))}</summary>
@@ -1627,18 +1692,30 @@ function libraryItemsHtml(rows) {
   const list = rows || visibleTitles();
   if (!titlesOf(state.items).length) return `<div class="empty">${esc(t("emptyLibrary"))}</div>`;
   if (!list.length) return `<div class="empty">${esc(t("emptyFilter"))}</div>`;
-  if (state.f.view === "list") return `<div class="glasslist">${list.map(glassRow).join("")}</div>`;
-  const hero = !filtersActive() ? pickHero() : null;
-  const rest = hero ? list.filter((i) => i.id !== hero.id) : list;
-  return `${hero ? featureGlass(hero) : ""}<div class="glasslist">${rest.map(glassRow).join("")}</div>`;
+  const following = list.filter((i) => i.status === "in_corso");
+  const hero = following[0] || list[0];
+  const others = list.filter((i) => i.id !== hero.id && i.status !== "in_corso");
+  const render = (items) => state.f.view === "list"
+    ? `<div class="rowlist plainlist">${items.map(rowHtml).join("")}</div>`
+    : `<div class="glasslist">${items.map(glassRow).join("")}</div>`;
+  return `<div class="homegrid">
+      <div class="homestage">${featureGlass(hero)}</div>
+      <div class="homecol">
+        ${hoursHtml()}
+        <div class="followhead"><h3>${esc(t("railNow"))}</h3>${viewSwitch()}</div>
+        ${following.length ? render(following) : `<p class="tiny">${esc(t("followEmpty"))}</p>`}
+      </div>
+    </div>
+    ${others.length ? `<h3>${esc(t("shelf"))}</h3>${render(others)}` : ""}`;
 }
 function featureGlass(item) {
   const p = item.kind === "tv" ? episodeProgress(item) : null;
   const frac = p && (p.total || p.seen) ? `${p.seen}/${p.total || p.seen}` : (item.year || "");
+  const joke = t("joke" + ((item.title || "").length % 4));
   return `<button class="glassfeat" type="button" data-act="open" data-id="${esc(item.id)}">
     <span class="glassfeat-art"><span class="tile-poster">${posterInner(item.posterPath, item.title)}</span></span>
     <span class="glassfeat-body">
-      <span class="pill">${esc(t("st_" + item.status))}</span>
+      <span class="pill">${esc(joke)}</span>
       <h2>${esc(item.title || t("none"))}</h2>
       <span class="glassmeta">${scoreBit(item.rating)}<span class="meta">${esc(item.kind === "tv" ? t("tv") : t("movie"))}</span></span>
       <span class="glassfeat-foot"><span>${esc(frac)}</span><span class="go">${esc(t("openTitle"))} ›</span></span>
@@ -2383,7 +2460,12 @@ async function onAct(act, el, ev) {
     return;
   }
   if (act === "viewmode") {
-    state.f.view = state.f.view === "wall" ? "list" : "wall";
+    state.f.view = el.dataset.view === "list" ? "list" : "wall";
+    paint({ keepScroll: true });
+    return;
+  }
+  if (act === "hours") {
+    state.f.hours = el.dataset.scope || "tutti";
     paint({ keepScroll: true });
     return;
   }
