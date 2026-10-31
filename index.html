@@ -512,9 +512,10 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
 @media (min-width: 960px) {
   .posters { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
+.maincol { padding-top: calc(8px + env(safe-area-inset-top)); }
 .dock {
   position: sticky;
-  top: 68px;
+  top: 8px;
   z-index: 9;
   display: flex;
   flex-direction: column;
@@ -557,16 +558,6 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
 <div class="shell">
   <nav id="nav" class="nav" aria-label="Sezioni"></nav>
   <div class="maincol">
-    <header class="top">
-      <div class="brand">
-        <img src="icon-192.png" alt="" width="36" height="36">
-        <div>
-          <p class="eyebrow" id="eyebrow"></p>
-          <h1>Cineteca</h1>
-        </div>
-      </div>
-      <button class="sync" id="syncBtn" type="button" data-act="sync-now"></button>
-    </header>
     <main id="view"></main>
   </div>
 </div>
@@ -1436,7 +1427,6 @@ function toast(msg) {
   toastTimer = setTimeout(() => { el.hidden = true; }, 4600);
 }
 function paintChrome() {
-  document.getElementById("eyebrow").textContent = t("eyebrow");
   const route = state.route.name === "list" ? "library" : state.route.name === "goals" ? "stats" : state.route.name === "detail" ? "library" : state.route.name;
   const items = [
     ["library", "#/", "library", "navLibrary"],
@@ -2098,7 +2088,6 @@ function goalCard(goal) {
 function settingsHtml() {
   const trash = state.items.filter((i) => (i.kind === "movie" || i.kind === "tv") && i.del);
   return `${pageHead("", t("settingsTitle"), t("settingsLead"))}
-    <p class="banner">${esc(sheetUrl() && settings.token ? t("truthOn") : t("truthOff"))}</p>
     <section class="card stack">
       <h3>${esc(t("setLook"))}</h3>
       <label>${esc(t("theme"))}<select class="select" id="theme">${[["auto", "themeAuto"], ["light", "themeLight"], ["dark", "themeDark"]].map(([v, k]) => `<option value="${v}" ${settings.theme === v ? "selected" : ""}>${esc(t(k))}</option>`).join("")}</select></label>
@@ -2115,6 +2104,8 @@ function settingsHtml() {
     </section>
     <section class="card stack">
       <h3>${esc(t("setSheet"))}</h3>
+      <p class="banner">${esc(state.syncError || state.syncText || (sheetUrl() && settings.token ? t("syncIdle") : t("syncOff")))}</p>
+      <p class="tiny">${esc(sheetUrl() && settings.token ? t("truthOn") : t("truthOff"))}</p>
       <label>${esc(t("scriptUrl"))}<input class="field" id="scriptUrl" type="url" inputmode="url" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(settings.scriptUrl || "")}"></label>
       <label>${esc(t("token"))}<input class="field" id="token" type="password" autocomplete="off" value="${esc(settings.token || "")}"></label>
       <button class="btn" type="button" data-act="save-settings">${esc(t("save"))}</button>
