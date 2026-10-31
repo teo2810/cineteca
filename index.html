@@ -32,10 +32,10 @@ html[data-theme="light"] { --bg: #0e0e10; }
 html, body { margin: 0; padding: 0; }
 body {
   background:
-    radial-gradient(760px 520px at -8% -12%, rgba(198, 245, 74, 0.42), transparent 58%),
-    radial-gradient(480px 360px at 108% 0%, rgba(167, 139, 250, 0.32), transparent 52%),
-    radial-gradient(420px 280px at 70% 110%, rgba(198, 245, 74, 0.14), transparent 50%),
-    #10140e;
+    radial-gradient(70% 80% at 0% 0%, rgba(198, 245, 74, 0.62), transparent 58%),
+    radial-gradient(65% 75% at 100% 100%, rgba(157, 78, 255, 0.62), transparent 60%),
+    linear-gradient(128deg, #1d2a0c 0%, #141816 46%, #241433 100%);
+  background-attachment: fixed;
   color: #f7f4fb;
   font-family: var(--sans);
   font-size: 16px;
@@ -512,6 +512,44 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
 @media (min-width: 960px) {
   .posters { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
+.dock {
+  position: sticky;
+  top: 68px;
+  z-index: 9;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 14px;
+  padding: 10px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 16px 40px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(26px) saturate(1.6);
+  -webkit-backdrop-filter: blur(26px) saturate(1.6);
+}
+.dockrow { display: flex; align-items: center; gap: 8px; }
+.dockrow .statusline { flex: 1; min-width: 0; margin: 0; }
+.dock .field { background: rgba(0, 0, 0, 0.28); border-color: rgba(255,255,255,.2); }
+.glassfeat, .hours, .card, .glassrow {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38), 0 18px 44px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(28px) saturate(1.7);
+  -webkit-backdrop-filter: blur(28px) saturate(1.7);
+}
+.glassfeat { background: rgba(255,255,255,.06); }
+.glassfeat-body {
+  margin: -36px 12px 12px;
+  position: relative;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+}
+.top { background: rgba(20, 24, 16, 0.28); }
 </style>
 
 </head>
@@ -1682,18 +1720,22 @@ function libraryHtml() {
   return `
     ${heading ? `<p class="eyebrow">${esc(t("lists"))}</p><h2>${esc(heading)}</h2>` : ""}
     ${state.route.name === "list" ? `<p><button class="btn ghost" type="button" data-act="delete-list" data-name="${esc(state.route.list)}">${esc(t("deleteList"))}</button></p>` : ""}
-    <div id="list">${libraryItemsHtml(rows)}</div>
-    ${demoBannerHtml()}
-    <div class="toolbar">
-      <input class="field searchline" id="q" type="search" enterkeyhint="search" placeholder="${esc(t("searchPh"))}" value="${esc(state.f.q)}" autocomplete="off">
-      <div class="chips statusline">
-        ${[["tutti", t("statusAll")], ...STATUSES.map((s) => [s, t("st_" + s)])].map(([s, label]) => `<button type="button" class="chip" data-act="set-filter" data-status="${s}" aria-pressed="${state.f.status === s}">${esc(label)}</button>`).join("")}
+    ${homeStageHtml(rows)}
+    <div class="dock">
+      <input class="field" id="q" type="search" enterkeyhint="search" placeholder="${esc(t("searchPh"))}" value="${esc(state.f.q)}" autocomplete="off">
+      <div class="dockrow">
+        <div class="chips statusline">
+          ${[["tutti", t("statusAll")], ...STATUSES.map((s) => [s, t("st_" + s)])].map(([s, label]) => `<button type="button" class="chip" data-act="set-filter" data-status="${s}" aria-pressed="${state.f.status === s}">${esc(label)}</button>`).join("")}
+          <button type="button" class="chip" data-act="kind" data-kind="movie" aria-pressed="${state.f.kind === "movie"}">${esc(t("kindMovie"))}</button>
+          <button type="button" class="chip" data-act="kind" data-kind="tv" aria-pressed="${state.f.kind === "tv"}">${esc(t("kindTv"))}</button>
+        </div>
+        ${viewSwitch()}
       </div>
-      <button type="button" class="chip" data-act="kind" data-kind="movie" aria-pressed="${state.f.kind === "movie"}">${esc(t("kindMovie"))}</button>
-      <button type="button" class="chip" data-act="kind" data-kind="tv" aria-pressed="${state.f.kind === "tv"}">${esc(t("kindTv"))}</button>
-      <button type="button" class="chip" data-act="kind" data-kind="tutti" aria-pressed="${state.f.kind === "tutti"}">${esc(t("kindAll"))}</button>
-      ${lists.length ? `<div class="chips">${lists.map((list) => `<button type="button" class="chip" data-act="open-list" data-name="${esc(list.name)}" aria-pressed="${state.route.name === "list" && state.route.list === list.name}">${esc(list.name)}</button>`).join("")}</div>` : ""}
-      <details class="filters">
+    </div>
+    <div id="list">${homeShelfHtml(rows)}</div>
+    ${demoBannerHtml()}
+    ${lists.length ? `<div class="chips">${lists.map((list) => `<button type="button" class="chip" data-act="open-list" data-name="${esc(list.name)}" aria-pressed="${state.route.name === "list" && state.route.list === list.name}">${esc(list.name)}</button>`).join("")}</div>` : ""}
+    <details class="filters">
         <summary>${esc(t("filters"))}</summary>
         <div class="stack" style="margin-top:8px">
           <select class="select" id="fStatus">${["tutti", ...STATUSES].map((s) => `<option value="${s}" ${state.f.status === s ? "selected" : ""}>${esc(s === "tutti" ? t("statusAll") : t("st_" + s))}</option>`).join("")}</select>
@@ -1707,31 +1749,39 @@ function libraryHtml() {
             <button class="btn" type="submit">${esc(t("add"))}</button>
           </form>
         </div>
-      </details>
-    </div>`;
+      </details>`;
 }
 function filtersActive() {
   return !!(state.f.q.trim() || state.f.kind !== "tutti" || state.f.status !== "tutti" || state.f.genre || state.f.tag || state.route.name === "list");
 }
-function libraryItemsHtml(rows) {
-  const list = rows || visibleTitles();
-  if (!titlesOf(state.items).length) return `<div class="empty">${esc(t("emptyLibrary"))}</div>`;
-  if (!list.length) return `<div class="empty">${esc(t("emptyFilter"))}</div>`;
+function homeStageHtml(rows) {
+  const list = rows || [];
+  if (!list.length) return "";
   const following = list.filter((i) => i.status === "in_corso");
   const hero = following[0] || list[0];
   const also = following.filter((i) => i.id !== hero.id);
-  const catalog = list.filter((i) => i.id !== hero.id);
-  const shelf = state.f.view === "list"
-    ? `<div class="plainlist">${catalog.map(lineHtml).join("")}</div>`
-    : `<div class="posters">${catalog.map(tileHtml).join("")}</div>`;
   return `<div class="homegrid">
       <div class="homestage">${featureGlass(hero)}</div>
       <div class="homecol">
         ${hoursHtml()}
         ${also.length ? `<h3>${esc(t("railNow"))}</h3><div class="plainlist">${also.map(lineHtml).join("")}</div>` : ""}
       </div>
-    </div>
-    ${catalog.length ? `<div class="followhead"><h3>${esc(t("shelf"))}</h3>${viewSwitch()}</div>${shelf}` : ""}`;
+    </div>`;
+}
+function homeShelfHtml(rows) {
+  const list = rows || [];
+  if (!titlesOf(state.items).length) return `<div class="empty">${esc(t("emptyLibrary"))}</div>`;
+  if (!list.length) return `<div class="empty">${esc(t("emptyFilter"))}</div>`;
+  const following = list.filter((i) => i.status === "in_corso");
+  const hero = following[0] || list[0];
+  const catalog = list.filter((i) => i.id !== hero.id);
+  if (!catalog.length) return "";
+  return state.f.view === "list"
+    ? `<div class="plainlist">${catalog.map(lineHtml).join("")}</div>`
+    : `<div class="posters">${catalog.map(tileHtml).join("")}</div>`;
+}
+function libraryItemsHtml(rows) {
+  return `${homeStageHtml(rows)}<div id="list">${homeShelfHtml(rows)}</div>`;
 }
 function featureGlass(item) {
   const p = item.kind === "tv" ? episodeProgress(item) : null;
