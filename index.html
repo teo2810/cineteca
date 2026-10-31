@@ -687,6 +687,26 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
 .sheetx { position: absolute; top: 0; right: 0; width: 34px; height: 34px; border-radius: 50%; border: 0; background: #2a2c31; color: #fff; }
 .textlink { border: 0; background: transparent; color: inherit; padding: 0; font: inherit; text-decoration: underline; text-underline-offset: 2px; }
 .sheetcard { margin-bottom: 14px; }
+.hours { margin: 0 0 12px; padding: 12px 14px 11px; }
+.hours-num b { font-size: 40px; }
+.hours-num span { font-size: 16px; }
+.nowcard .tile-poster, .nowcard .glassfeat-art .tile-poster { aspect-ratio: 16 / 8.4; min-height: 0; }
+.nowbody h2 { font-size: 24px; }
+.dock .field { min-height: 44px; }
+.dock .chip { min-height: 32px; font-size: 13px; }
+.coverflow { gap: 10px; padding: 8px 0 16px; }
+.disc { flex: 0 0 calc((100% - 20px) / 3); }
+.disc-art .tile-poster { aspect-ratio: 3 / 4; border-radius: 18px; }
+.disc b { font-size: 14px; margin-top: 6px; }
+.sheet { max-height: 86vh; overflow: auto; }
+.sheetdesc { margin: 12px 0 4px; color: #d7d7dc; font-size: 15px; line-height: 1.45; }
+.sheet h3 { margin: 14px 0 6px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #d6ff6a; }
+.sheet textarea { width: 100%; min-height: 84px; }
+.sheet .stars { margin-bottom: 8px; }
+@media (min-width: 960px) {
+  .nowcard .tile-poster { min-height: 0; aspect-ratio: 16 / 8.4; }
+  .disc { flex-basis: calc((100% - 20px) / 3); }
+}
 </style>
 
 </head>
@@ -1600,8 +1620,8 @@ function bindCoverflow() {
     for (const disc of el.querySelectorAll(".disc")) {
       const r = disc.getBoundingClientRect();
       const delta = (r.left + r.width / 2 - mid) / Math.max(1, el.clientWidth);
-      const ry = Math.max(-28, Math.min(28, delta * 36));
-      let scale = Math.max(0.9, 1.1 - Math.abs(delta) * 0.42);
+      const ry = Math.max(-10, Math.min(10, delta * 14));
+      let scale = Math.max(0.94, 1.06 - Math.abs(delta) * 0.18);
       if (disc === pressed) scale *= 1.06;
       disc.style.transform = `rotateY(${(-ry).toFixed(1)}deg) scale(${scale.toFixed(3)})`;
     }
@@ -2103,7 +2123,7 @@ function blurb(item) {
   return raw.length > 140 ? raw.slice(0, 137) + "…" : raw;
 }
 function peekHead(item, mode) {
-  const quote = blurb(item);
+  const quote = mode === "bare" ? "" : blurb(item);
   const score = item.rating != null ? `<span class="sheetscore">${esc(formatScore(item.rating))}</span>` : "";
   const year = item.year ? esc(item.year) : "";
   const tail = mode === "sheet"
@@ -2119,13 +2139,25 @@ function peekHead(item, mode) {
     </div>
     ${quote ? `<p class="sheetquote">“${esc(quote)}”</p>` : ""}`;
 }
+function editingItem() {
+  if (state.route.name === "detail" && state.detail) return state.detail;
+  if (!state.sheet) return null;
+  return state.items.find((i) => i.id === state.sheet && !i.del) || null;
+}
 function sheetHtml() {
-  if (!state.sheet || state.route.name === "detail") return "";
-  const item = state.items.find((i) => i.id === state.sheet && !i.del);
-  if (!item) return "";
+  const item = editingItem();
+  if (!item || state.route.name === "detail") return "";
+  const overview = String(item.overview || "").trim();
   return `<div class="sheetback"><button class="sheetcatch" type="button" data-act="close-sheet" aria-label="${esc(t("closeSheet"))}"></button><div class="sheet" role="dialog" aria-modal="true">
       <button class="sheetx" type="button" data-act="close-sheet" aria-label="${esc(t("closeSheet"))}">×</button>
-      ${peekHead(item, "sheet")}
+      ${peekHead(item, "bare")}
+      ${overview ? `<p class="sheetdesc">${esc(overview)}</p>` : `<p class="tiny">${esc(t("overviewEmpty"))}</p>`}
+      <h3>${esc(t("rating"))}</h3>
+      <div class="score"><b id="scoreNum">${esc(formatScore(item.rating))}</b></div>
+      ${starRow(item.rating)}
+      <input id="ratingRange" type="range" min="0" max="10" step="0.5" value="${item.rating === null ? 0 : item.rating}" aria-label="${esc(t("rating"))}">
+      <h3>${esc(t("notes"))}</h3>
+      <textarea id="notes" placeholder="${esc(t("notesPh"))}">${esc(item.notes || "")}</textarea>
       <button class="btn sheetclose" type="button" data-act="close-sheet">${esc(t("closeSheet"))}</button>
     </div></div>`;
 }
@@ -2638,12 +2670,14 @@ document.addEventListener("change", (ev) => {
     if (box) box.innerHTML = libraryItemsHtml();
     return;
   }
-  if (el.id === "ratingRange" && state.detail) {
-    state.detail.rating = normalizeRating(el.value);
+  if (el.id === "ratingRange") {
+    const item = editingItem();
+    if (!item) return;
+    item.rating = normalizeRating(el.value);
     const num = document.getElementById("scoreNum");
-    if (num) num.textContent = formatScore(state.detail.rating);
-    paintStars(state.detail.rating);
-    saveItem(state.detail, { activity: true }).then(() => { state.detailInLibrary = true; });
+    if (num) num.textContent = formatScore(item.rating);
+    paintStars(item.rating);
+    saveItem(item, { activity: true }).then(() => { state.detailInLibrary = true; });
     return;
   }
   if (el.id === "importFile" && el.files && el.files[0]) {
@@ -2681,10 +2715,12 @@ document.addEventListener("input", (ev) => {
       return;
     }
     searchTimer = setTimeout(() => { doSearch(q); }, 420);
-  } else if (el.id === "notes" && state.detail) {
-    state.detail.notes = el.value;
+  } else if (el.id === "notes") {
+    const item = editingItem();
+    if (!item) return;
+    item.notes = el.value;
     clearTimeout(noteTimer);
-    noteTimer = setTimeout(() => saveItem(state.detail, { activity: false }), 800);
+    noteTimer = setTimeout(() => saveItem(item, { activity: false }), 800);
   } else if (el.id === "newList") state.listDraft = el.value;
 });
 let noteTimer = null;
@@ -2785,13 +2821,15 @@ async function onAct(act, el, ev) {
     paint({ keepScroll: true });
     return;
   }
-  if (act === "set-rate" && state.detail) {
+  if (act === "set-rate") {
+    const item = editingItem();
+    if (!item) return;
     const n = Number(el.dataset.value);
     if (!Number.isFinite(n)) return;
-    state.detail.rating = state.detail.rating === n ? normalizeRating(n - 0.5) : n;
+    item.rating = item.rating === n ? normalizeRating(n - 0.5) : n;
     state.detailInLibrary = true;
-    if (!state.items.some((i) => i.id === state.detail.id)) state.items.push(state.detail);
-    await saveItem(state.detail, { activity: true });
+    if (!state.items.some((i) => i.id === item.id)) state.items.push(item);
+    await saveItem(item, { activity: true });
     paint({ keepScroll: true });
     return;
   }
