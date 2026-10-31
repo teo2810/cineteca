@@ -621,24 +621,31 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
 .disc-score { min-width: 36px; text-align: center; }
 .disc-status.s-abbandonato { color: #ffb4b4; border-color: rgba(255,140,140,.45); }
 .disc-status.s-da_vedere { color: #d6ff6a; }
-.nav { overflow: visible; align-items: center; padding-bottom: 8px; background: rgba(20,20,24,.72); }
+.nav {
+  overflow: hidden;
+  align-items: center;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 16px 40px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(28px) saturate(1.8);
+  -webkit-backdrop-filter: blur(28px) saturate(1.8);
+}
+.nav button,
 .nav button.orb {
-  width: 72px; height: 72px; margin-top: -34px; border-radius: 50%;
-  background: #1a1c20; color: #fff; border: 5px solid #0c0e10;
-  box-shadow: 0 10px 24px rgba(0,0,0,.45);
+  width: auto;
+  height: auto;
+  min-height: 46px;
+  margin: 0;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  box-shadow: none;
+  color: rgba(247, 244, 251, 0.72);
 }
-.nav button.orb svg { width: 28px; height: 28px; }
-.nav button[aria-current="page"]:not(.orb) {
-  background: #c6f54a; color: #142006; width: 44px; height: 44px; margin: 0 auto; border-radius: 16px;
-}
-@media (min-width: 960px) {
-  .maincol { max-width: 460px; padding-left: 16px; padding-right: 16px; }
-  .nav button.orb { width: 72px; height: 72px; margin-top: -34px; border-radius: 50%; }
-}
-.nav button.orb { width: auto; height: auto; margin: 0; border: 0; border-radius: 18px; background: transparent; box-shadow: none; }
 .nav button[aria-current="page"],
 .nav button[aria-current="page"]:not(.orb) {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.22);
   color: #fff;
   width: auto;
   height: auto;
@@ -646,17 +653,17 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
   border-radius: 18px;
 }
 .dock {
-  position: sticky;
-  top: 0;
-  z-index: 8;
-  margin: 0 0 14px;
-  padding: 8px;
-  border-radius: 24px;
-  background: rgba(16, 18, 16, 0.62);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(22px) saturate(1.5);
-  -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  position: static;
+  margin: 6px 0 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+@media (min-width: 960px) {
+  .maincol { max-width: 460px; padding-left: 16px; padding-right: 16px; }
+  .nav { background: rgba(255, 255, 255, 0.14); }
 }
 </style>
 
@@ -1876,6 +1883,7 @@ function libraryHtml() {
     <header class="mast"><span class="mark">C</span><span class="mastname"><strong>Cineteca</strong><small>${esc(t("eyebrow"))}</small></span><span class="onlinetag${navigator.onLine ? "" : " off"}">${navigator.onLine ? "Online" : "Offline"}</span></header>
     ${heading ? `<p class="eyebrow">${esc(t("lists"))}</p><h2>${esc(heading)}</h2>` : ""}
     ${state.route.name === "list" ? `<p><button class="btn ghost" type="button" data-act="delete-list" data-name="${esc(state.route.list)}">${esc(t("deleteList"))}</button></p>` : ""}
+    ${homeStageHtml()}
     <div class="dock">
       <input class="field" id="q" type="search" enterkeyhint="search" placeholder="${esc(t("searchPh"))}" value="${esc(state.f.q)}" autocomplete="off">
       <div class="dockrow">
@@ -1885,7 +1893,6 @@ function libraryHtml() {
         </div>
       </div>
     </div>
-    ${homeStageHtml(rows)}
     <div id="list">${homeShelfHtml(rows)}</div>
     ${demoBannerHtml()}
     <details class="filters">
@@ -1907,18 +1914,18 @@ function libraryHtml() {
 function filtersActive() {
   return !!(state.f.q.trim() || state.f.kind !== "tutti" || state.f.status !== "tutti" || state.f.genre || state.f.tag || state.route.name === "list");
 }
-function homeStageHtml(rows) {
-  const list = rows || [];
-  const hero = list.find((i) => i.status === "in_corso") || list[0];
+function homeStageHtml() {
+  const all = titlesOf(state.items);
+  const hero = all.find((i) => i.status === "in_corso") || all[0];
   return `${hoursHtml()}${hero ? `<div class="homestage">${featureGlass(hero)}</div>` : ""}`;
 }
 function homeShelfHtml(rows) {
   const list = rows || [];
   if (!titlesOf(state.items).length) return `<div class="empty">${esc(t("emptyLibrary"))}</div>`;
   if (!list.length) return `<div class="empty">${esc(t("emptyFilter"))}</div>`;
-  const following = list.filter((i) => i.status === "in_corso");
-  const hero = following[0] || list[0];
-  const catalog = list.filter((i) => i.id !== hero.id);
+  const all = titlesOf(state.items);
+  const hero = all.find((i) => i.status === "in_corso") || all[0];
+  const catalog = hero ? list.filter((i) => i.id !== hero.id) : list;
   if (!catalog.length) return "";
   return `<div class="jukehead"><h3><i class="rec"></i>${esc(t("jukebox"))}</h3><span class="tiny">${esc(t("jukeboxHint"))} ‹ ›</span></div><div class="coverflow" id="coverflow">${catalog.map(discHtml).join("")}</div>`;
 }
