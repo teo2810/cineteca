@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@380;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root, html[data-theme="dark"], html[data-theme="light"] {
   --bg: #0e0e10;
@@ -31,14 +31,13 @@ html[data-theme="light"] { --bg: #0e0e10; }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  background: #0f0e17;
-  background-image:
-    radial-gradient(90% 42% at 0% 0%, #2e1a47, transparent 62%),
-    radial-gradient(80% 40% at 100% 100%, #2e1a47, transparent 58%);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(46, 26, 71, 0.5), transparent 70%),
+    linear-gradient(180deg, #1a102f 0%, #0b0a10 50%, #0b0a10 100%);
   background-attachment: fixed;
-  color: #fff;
-  font-family: Inter, var(--sans);
-  font-size: 16px;
+  color: #f4f4f5;
+  font-family: "Plus Jakarta Sans", var(--sans);
+  font-size: 15px;
   line-height: 1.45;
   min-height: 100vh;
 }
@@ -779,6 +778,62 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
 .disc-art .tile-poster { width: 100%; height: auto; aspect-ratio: 2 / 3; }
 .maincol { padding-bottom: calc(128px + env(safe-area-inset-bottom)); }
 .ticket { margin-top: 16px; }
+.maincol { max-width: 430px; padding: 0 16px calc(150px + env(safe-area-inset-bottom)); }
+.shell { max-width: 430px; }
+.top-header { display: flex; align-items: center; justify-content: space-between; padding: calc(16px + env(safe-area-inset-top)) 0 12px; }
+.brand-title { margin: 0; font-size: 24px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
+.brand-title .dot { width: 8px; height: 8px; border-radius: 50%; background: #d2f838; box-shadow: 0 0 12px rgba(210,248,56,.8); }
+.brand-sub { margin: 2px 0 0; font-size: 12px; color: #a1a1aa; }
+.sync-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 99px; font-size: 11px; font-weight: 600; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); }
+.sync-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #a1a1aa; }
+.sync-badge.on::before { background: #10b981; }
+.sync-badge.bad::before { background: #ef4444; }
+.glass { background: rgba(22, 23, 30, 0.75); border: 1px solid rgba(255,255,255,.08); border-radius: 24px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+.hours-card { padding: 14px 16px; margin: 0 0 16px; }
+.hours-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.hours-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #a1a1aa; }
+.hours-card .hours-num { margin: 4px 0; font-size: 32px; font-weight: 800; color: #fff; line-height: 1; }
+.hours-card .hours-num span { font-size: 18px; color: #d2f838; font-weight: 700; margin-left: 4px; }
+.hours-sub { margin: 0 0 12px; font-size: 12px; color: #a1a1aa; }
+.hours-card .hourpills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: rgba(0,0,0,.4); padding: 4px; border-radius: 16px; }
+.hours-card .hourpills button { padding: 8px 0; font-size: 12px; font-weight: 600; border-radius: 12px; color: #a1a1aa; background: transparent; min-height: 0; }
+.hours-card .hourpills button[aria-pressed="true"] { background: #d2f838; color: #000; }
+.hours-card .splitbar { width: 80px; height: 6px; }
+.hero-card { position: relative; overflow: hidden; padding: 14px; margin: 0 0 16px; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between; color: inherit; text-align: left; }
+.hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.35; filter: blur(4px); transform: scale(1.08); }
+.hero-tag { position: relative; z-index: 1; display: inline-block; padding: 3px 10px; border-radius: 99px; background: rgba(210,248,56,.15); border: 1px solid rgba(210,248,56,.3); color: #d2f838; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
+.hero-title { position: relative; z-index: 1; margin: 0 0 2px; font-size: 20px; font-weight: 800; color: #fff; }
+.hero-meta { position: relative; z-index: 1; margin: 0; font-size: 12px; color: rgba(255,255,255,.8); }
+.hero-foot { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+.hero-meter { flex: 1; height: 4px; border-radius: 99px; background: rgba(255,255,255,.2); overflow: hidden; }
+.hero-meter i { display: block; height: 100%; background: #d2f838; }
+.hero-btn { width: 38px; height: 38px; border-radius: 50%; background: #d2f838; color: #000; display: grid; place-items: center; font-size: 13px; font-weight: 800; }
+.search-box { position: relative; margin: 0 0 12px; }
+.search-box svg { position: absolute; left: 16px; top: 15px; width: 18px; height: 18px; color: #71717a; }
+.search-box input { width: 100%; height: 48px; padding: 0 16px 0 44px; border-radius: 24px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.05); color: #fff; font-size: 14px; }
+.search-box input::placeholder { color: #71717a; }
+.chips-row { display: flex; gap: 8px; overflow-x: auto; margin: 0 0 16px; scrollbar-width: none; }
+.chips-row::-webkit-scrollbar { display: none; }
+.chips-row .chip { flex: 0 0 auto; height: 36px; min-height: 36px; padding: 0 16px; border-radius: 18px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: #a1a1aa; font-size: 13px; font-weight: 600; }
+.chips-row .chip[aria-pressed="true"] { background: #d2f838; color: #000; border-color: transparent; }
+.juke-head { display: flex; justify-content: space-between; align-items: center; margin: 0 0 10px; }
+.juke-title { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #d2f838; }
+.juke-hint { font-size: 11px; color: #a1a1aa; }
+.coverflow { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 8px 0 20px; scrollbar-width: none; }
+.disc { flex: 0 0 160px; width: 160px; scroll-snap-align: center; background: transparent; border: 0; padding: 0; text-align: left; color: inherit; }
+.disc-poster { display: block; width: 160px; height: 230px; border-radius: 20px; overflow: hidden; position: relative; background: #1e1b2e; box-shadow: 0 12px 24px rgba(0,0,0,.4); }
+.disc-poster img { width: 100%; height: 100%; object-fit: cover; }
+.disc-badge { position: absolute; top: 10px; right: 10px; padding: 3px 8px; border-radius: 99px; background: #d2f838; color: #000; font-size: 11px; font-weight: 800; font-style: normal; }
+.disc-status { position: absolute; left: 10px; bottom: 10px; padding: 3px 8px; border-radius: 99px; background: rgba(0,0,0,.6); color: #fff; font-size: 10px; font-weight: 600; font-style: normal; border: 1px solid rgba(255,255,255,.15); }
+.disc-name { display: block; margin: 8px 0 2px; font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.disc-meta { display: block; font-size: 12px; color: #a1a1aa; }
+.nav { height: auto; width: min(390px, calc(100% - 32px)); bottom: calc(16px + env(safe-area-inset-bottom)); border-radius: 35px; padding: 8px 12px; background: rgba(18,18,22,.85); }
+.nav button, .nav button[aria-current="page"], .nav button[aria-current="page"]:not(.orb) { height: 48px; min-height: 48px; border-radius: 20px; background: transparent; color: #71717a; }
+.nav button[aria-current="page"]:not(.orb) { background: rgba(255,255,255,.1); color: #d2f838; }
+@media (min-width: 960px) {
+  .shell, .maincol { max-width: 430px; }
+  .disc { flex-basis: 160px; }
+}
 </style>
 
 </head>
@@ -1926,19 +1981,14 @@ function hoursHtml() {
   const total = b.filmMins + b.tvMins || 1;
   const filmPct = scope === "movie" ? 100 : scope === "tv" ? 0 : Math.round((b.filmMins / total) * 100);
   const btn = (id, label) => `<button type="button" data-act="hours" data-scope="${id}" aria-pressed="${scope === id}">${esc(label)}</button>`;
-  return `<section class="hours">
-    <div class="hours-top">
-      <p class="hours-kicker">${esc(t("hoursKicker"))}</p>
-      <div class="hourpills">${btn("tutti", t("hoursAll"))}${btn("movie", t("hoursMovie"))}${btn("tv", t("hoursTv"))}</div>
+  return `<section class="glass hours-card">
+    <div class="hours-header">
+      <span class="hours-title">${esc(t("hoursKicker"))}</span>
+      <span class="splitbar" aria-hidden="true"><i class="film" style="width:${filmPct}%"></i><i class="tv" style="width:${100 - filmPct}%"></i></span>
     </div>
-    <div class="hours-mid">
-      <p class="hours-num"><b>${esc(formatHours(mins))}</b> <span>${esc(t("hoursUnit"))}</span></p>
-      <span class="hours-split">
-        <span class="splitlabs"><span>Film</span><span>Serie</span></span>
-        <span class="splitbar" aria-hidden="true"><i class="film" style="width:${filmPct}%"></i><i class="tv" style="width:${100 - filmPct}%"></i></span>
-      </span>
-    </div>
-    <p class="hours-detail">${esc(detail)}</p>
+    <p class="hours-num">${esc(formatHours(mins))} <span>${esc(t("hoursUnit"))}</span></p>
+    <p class="hours-sub">${esc(detail)}</p>
+    <div class="hourpills">${btn("tutti", t("hoursAll"))}${btn("movie", t("hoursMovie"))}${btn("tv", t("hoursTv"))}</div>
   </section>`;
 }
 function viewSwitch() {
@@ -2007,12 +2057,19 @@ function libraryHtml() {
   return `
     ${heading ? `<p class="eyebrow">${esc(t("lists"))}</p><h2>${esc(heading)}</h2>` : ""}
     ${state.route.name === "list" ? `<p><button class="btn ghost" type="button" data-act="delete-list" data-name="${esc(state.route.list)}">${esc(t("deleteList"))}</button></p>` : ""}
+    <header class="top-header">
+      <div>
+        <h1 class="brand-title">Cineteca <span class="dot"></span></h1>
+        <p class="brand-sub">Collezione personale e archivio</p>
+      </div>
+      <div id="syncBtn" class="sync-badge">${esc(state.syncText || t("syncOff"))}</div>
+    </header>
     ${homeStageHtml()}
-    <label class="searchpill">
+    <div class="search-box">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10.4 3a7.4 7.4 0 0 1 5.9 11.8l3.9 3.9a1.15 1.15 0 0 1-1.63 1.62l-3.9-3.9A7.4 7.4 0 1 1 10.4 3zm0 2.2a5.2 5.2 0 1 0 0 10.4 5.2 5.2 0 0 0 0-10.4z"/></svg>
       <input id="q" type="search" enterkeyhint="search" placeholder="${esc(t("searchPh"))}" value="${esc(state.f.q)}" autocomplete="off">
-    </label>
-    <div class="chips statusline quick">
+    </div>
+    <div class="chips-row">
       ${[["tutti", t("statusAll")], ...STATUSES.map((s) => [s, t("st_" + s)])].map(([s, label]) => `<button type="button" class="chip" data-act="set-filter" data-status="${s}" aria-pressed="${state.f.status === s}">${esc(label)}</button>`).join("")}
       ${lists.map((list) => `<button type="button" class="chip" data-act="open-list" data-name="${esc(list.name)}" aria-pressed="${state.route.name === "list" && state.route.list === list.name}">${esc(list.name)}</button>`).join("")}
     </div>
@@ -2046,46 +2103,42 @@ function homeShelfHtml(rows) {
   const list = rows || [];
   if (!titlesOf(state.items).length) return `<div class="empty">${esc(t("emptyLibrary"))}</div>`;
   if (!list.length) return `<div class="empty">${esc(t("emptyFilter"))}</div>`;
-  const hero = titlesOf(state.items).find((i) => i.status === "in_corso") || titlesOf(state.items)[0];
-  const catalog = hero ? list.filter((i) => i.id !== hero.id) : list;
-  if (!catalog.length) return "";
-  return `<div class="jukehead"><h3><i class="rec"></i>${esc(t("jukebox"))}</h3><span class="tiny">${esc(t("jukeboxHint"))}</span></div><div class="coverflow" id="coverflow">${catalog.map(discHtml).join("")}</div>`;
+  return `<div class="juke-head"><span class="juke-title">${esc(t("jukebox"))}</span><span class="juke-hint">${esc(t("jukeboxHint"))}</span></div><div class="coverflow" id="coverflow">${list.map(discHtml).join("")}</div>`;
 }
 function discHtml(item) {
   const sub = [item.year, (item.genres && item.genres[0]) || (item.kind === "tv" ? t("tv") : t("movie"))].filter(Boolean).join(" · ");
   const score = item.rating != null ? formatScore(item.rating) : "";
   return `<button class="disc" type="button" data-act="open" data-id="${esc(item.id)}">
-    <span class="disc-art"><span class="tile-poster">${posterInner(item.posterPath, item.title)}
-      ${score ? `<em class="disc-score">${esc(score)}</em>` : ""}
-      <em class="disc-status s-${esc(item.status)}">${esc(t("st_" + item.status))}</em>
-    </span></span>
-    <b>${esc(item.title || t("none"))}</b>
-    <span class="sub">${esc(sub)}</span>
+    <span class="disc-poster">${posterInner(item.posterPath, item.title)}
+      ${score ? `<em class="disc-badge">${esc(score)}</em>` : ""}
+      <em class="disc-status">${esc(t("st_" + item.status))}</em>
+    </span>
+    <span class="disc-name">${esc(item.title || t("none"))}</span>
+    <span class="disc-meta">${esc(sub)}</span>
   </button>`;
 }
-function libraryItemsHtml(rows) {
-  return `${homeStageHtml(rows)}<div id="list">${homeShelfHtml(rows)}</div>`;
+function libraryItemsHtml() {
+  return homeShelfHtml(visibleTitles());
 }
 function featureGlass(item) {
   const p = item.kind === "tv" ? episodeProgress(item) : null;
   const frac = p && (p.total || p.seen) ? `${p.seen}/${p.total || p.seen}` : (item.year || "");
   const joke = t("joke" + ((item.title || "").length % 4));
   const pct = progressPct(item);
-  const ep = p && (p.total || p.seen) ? `Ep. ${p.seen} di ${p.total || p.seen}` : (item.year || "");
-  return `<button class="glassfeat nowcard" type="button" data-act="open" data-id="${esc(item.id)}">
-    <span class="glassfeat-art"><span class="tile-poster">${posterInner(item.posterPath, item.title)}</span>
-      <span class="nowshade"></span>
-      <span class="nowtop"><span class="pill">${esc(joke)}</span><span class="pill">${esc(item.kind === "tv" ? t("tv") : t("movie"))}</span></span>
-      <span class="nowbody">
-        <span>
-          <h2>${esc(item.title || t("none"))}</h2>
-          <span class="glassmeta">${scoreBit(item.rating)}${ep ? `<span class="meta">${esc(ep)}</span>` : ""}</span>
-        </span>
-        <span class="nowgo">${esc(t("openTitle"))} ›</span>
-      </span>
-      <span class="nowmeter"><span style="width:${pct}%"></span></span>
-    </span>
-  </button>`;
+  const bg = posterUrl(item.posterPath);
+  const ep = p && (p.total || p.seen) ? `Ep. ${p.seen} di ${p.total || p.seen}` : (item.kind === "tv" ? t("tv") : t("movie"));
+  return `<div class="glass hero-card" data-act="open" data-id="${esc(item.id)}" role="button" tabindex="0">
+    <div class="hero-bg" style="${bg ? `background-image:url('${esc(bg)}')` : ""}"></div>
+    <div>
+      <span class="hero-tag">${esc(joke)}</span>
+      <h2 class="hero-title">${esc(item.title || t("none"))}</h2>
+      <p class="hero-meta">${item.rating != null ? "★ " + esc(formatScore(item.rating)) + " · " : ""}${esc(ep)}</p>
+    </div>
+    <div class="hero-foot">
+      <span class="hero-meter"><i style="width:${pct}%"></i></span>
+      <span class="hero-btn" aria-hidden="true">▶</span>
+    </div>
+  </div>`;
 }
 function lineHtml(item) {
   const p = item.kind === "tv" ? episodeProgress(item) : null;
