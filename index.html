@@ -486,6 +486,32 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
   .homecol { position: sticky; top: 16px; }
   .glassfeat-art .tile-poster { aspect-ratio: 16 / 11; min-height: 480px; }
 }
+.plainlist { display: flex; flex-direction: column; }
+.line {
+  width: 100%; display: grid; grid-template-columns: 1fr auto; column-gap: 12px;
+  text-align: left; background: transparent; border: 0; border-bottom: 1px solid rgba(255,255,255,.1);
+  border-radius: 0; min-height: 52px; padding: 10px 2px; color: inherit;
+}
+.line b { font-size: 16px; font-weight: 650; }
+.line em { grid-row: 1 / span 2; align-self: center; font-style: normal; color: #d6ff6a; font-weight: 700; }
+.pagehead, .card, details.filters, textarea, .field, .select, .banner, .ticket {
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.12);
+  color: inherit;
+  box-shadow: none;
+}
+.eyebrow:empty { display: none; }
+.chip[aria-pressed="true"], .chip.on, .btn { background: #c6f54a; color: #142006; border-color: transparent; }
+.btn.ghost { background: rgba(255,255,255,.08); color: #f7f4fb; border-color: rgba(255,255,255,.16); }
+.track > span, .meter > span { background: #c6f54a; }
+.cell.lv1 { background: #3a4a18; }
+.cell.lv2 { background: #6d8f22; }
+.cell.lv3 { background: #a6d63a; }
+.cell.lv4 { background: #d6ff6a; }
+.goal .medal { background: rgba(198,245,74,.16); color: #d6ff6a; }
+@media (min-width: 960px) {
+  .posters { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
 </style>
 
 </head>
@@ -1682,8 +1708,7 @@ function libraryHtml() {
           </form>
         </div>
       </details>
-    </div>
-    <div id="list">${libraryItemsHtml(rows)}</div>`;
+    </div>`;
 }
 function filtersActive() {
   return !!(state.f.q.trim() || state.f.kind !== "tutti" || state.f.status !== "tutti" || state.f.genre || state.f.tag || state.route.name === "list");
@@ -1694,19 +1719,19 @@ function libraryItemsHtml(rows) {
   if (!list.length) return `<div class="empty">${esc(t("emptyFilter"))}</div>`;
   const following = list.filter((i) => i.status === "in_corso");
   const hero = following[0] || list[0];
-  const others = list.filter((i) => i.id !== hero.id && i.status !== "in_corso");
-  const render = (items) => state.f.view === "list"
-    ? `<div class="rowlist plainlist">${items.map(rowHtml).join("")}</div>`
-    : `<div class="glasslist">${items.map(glassRow).join("")}</div>`;
+  const also = following.filter((i) => i.id !== hero.id);
+  const catalog = list.filter((i) => i.id !== hero.id);
+  const shelf = state.f.view === "list"
+    ? `<div class="plainlist">${catalog.map(lineHtml).join("")}</div>`
+    : `<div class="posters">${catalog.map(tileHtml).join("")}</div>`;
   return `<div class="homegrid">
       <div class="homestage">${featureGlass(hero)}</div>
       <div class="homecol">
         ${hoursHtml()}
-        <div class="followhead"><h3>${esc(t("railNow"))}</h3>${viewSwitch()}</div>
-        ${following.length ? render(following) : `<p class="tiny">${esc(t("followEmpty"))}</p>`}
+        ${also.length ? `<h3>${esc(t("railNow"))}</h3><div class="plainlist">${also.map(lineHtml).join("")}</div>` : ""}
       </div>
     </div>
-    ${others.length ? `<h3>${esc(t("shelf"))}</h3>${render(others)}` : ""}`;
+    ${catalog.length ? `<div class="followhead"><h3>${esc(t("shelf"))}</h3>${viewSwitch()}</div>${shelf}` : ""}`;
 }
 function featureGlass(item) {
   const p = item.kind === "tv" ? episodeProgress(item) : null;
@@ -1722,14 +1747,13 @@ function featureGlass(item) {
     </span>
   </button>`;
 }
-function glassRow(item) {
+function lineHtml(item) {
   const p = item.kind === "tv" ? episodeProgress(item) : null;
-  const meta = p && (p.total || p.seen) ? t("episodeProgress", p) : [item.year, t("st_" + item.status)].filter(Boolean).join(" · ");
-  const center = item.kind === "tv" ? String(progressPct(item)) : (item.rating == null ? "—" : formatScore(item.rating));
-  return `<button class="glassrow" type="button" data-act="open" data-id="${esc(item.id)}">
-    <span class="glassrow-art"><span class="tile-poster">${posterInner(item.posterPath, item.title)}</span></span>
-    <span class="glassrow-mid"><b>${esc(item.title || t("none"))}</b><span class="meta">${esc(meta)}</span></span>
-    ${ringHtml(progressPct(item), center)}
+  const side = p && (p.total || p.seen) ? `${p.seen}/${p.total || p.seen}` : (item.rating != null ? formatScore(item.rating) : t("st_" + item.status));
+  return `<button class="line" type="button" data-act="open" data-id="${esc(item.id)}">
+    <b>${esc(item.title || t("none"))}</b>
+    <span class="meta">${esc([item.year, item.kind === "tv" ? t("tv") : t("movie")].filter(Boolean).join(" · "))}</span>
+    <em>${esc(side)}</em>
   </button>`;
 }
 function showCardHtml(item) {
@@ -1797,7 +1821,7 @@ function searchHtml() {
       <input class="field grow" id="searchQ" type="search" enterkeyhint="search" value="${esc(state.searchQ)}" placeholder="${esc(t("searchTitle"))}" autocomplete="off">
       <button class="btn" type="submit">${esc(t("searchBtn"))}</button>
     </form>`;
-  return `${pageHead("TMDB", t("searchTitle"), t("searchLead"), form)}
+  return `${pageHead("", t("searchTitle"), t("searchLead"), form)}
     <div id="searchOut">${searchResultsHtml()}</div>`;
 }
 function searchResultsHtml() {
@@ -1942,21 +1966,25 @@ function relatedHtml(item) {
 function upcomingHtml() {
   const today = dayKey(new Date());
   const rows = titlesOf(state.items).filter((i) => i.kind === "tv" && i.nextEpisode && i.nextEpisode.airDate).slice().sort((a, b) => String(a.nextEpisode.airDate).localeCompare(String(b.nextEpisode.airDate)));
-  return `${pageHead("Cineteca", t("upcomingTitle"), t("upcomingLead"))}
+  return `${pageHead("", t("upcomingTitle"), t("upcomingLead"))}
     <p class="tiny">${esc(t("upcomingCap"))}</p>
     <p><button class="btn" type="button" data-act="refresh-upcoming">${esc(t("refreshUpcoming"))}</button></p>
     ${state.upcomingMsg ? `<p class="banner">${esc(state.upcomingMsg)}</p>` : ""}
-    ${rows.length ? `<div class="rowlist">${rows.map((item) => {
+    ${rows.length ? `<div class="glasslist">${rows.map((item) => {
       const ep = item.nextEpisode;
       const when = ep.airDate < today ? t("aired", { date: formatDay(ep.airDate) }) : t("airs", { date: formatDay(ep.airDate) });
-      return `<button class="row" type="button" data-act="open" data-id="${esc(item.id)}">${posterBox(item.posterPath, item.title, "poster")}<span><b>${esc(item.title)}</b><span class="meta">${esc(t("epCode", { s: ep.season, e: ep.episode }))} · ${esc(ep.name || "")}<br>${esc(when)}</span></span></button>`;
+      return `<button class="glassrow" type="button" data-act="open" data-id="${esc(item.id)}">
+        <span class="glassrow-art"><span class="tile-poster">${posterInner(item.posterPath, item.title)}</span></span>
+        <span class="glassrow-mid"><b>${esc(item.title)}</b><span class="meta">${esc(t("epCode", { s: ep.season, e: ep.episode }))} · ${esc(when)}</span></span>
+      </button>`;
     }).join("")}</div>` : `<div class="empty">${esc(t("upcomingEmpty"))}</div>`}`;
 }
 
 function statsHtml() {
   const items = engagedOf(state.items);
   const counts = activityMap(state.items);
-  return `${pageHead("Cineteca", t("statsTitle"), t("statsLead"))}
+  return `${pageHead("", t("statsTitle"), t("statsLead"))}
+    ${hoursHtml()}
     ${figuresHtml(state.items)}
     <p><button class="btn ghost" type="button" data-act="nav" data-hash="#/obiettivi">${esc(t("openGoals"))}</button></p>
     <section class="card"><h3>${esc(t("heatmap"))}</h3>${heatmapHtml(counts)}</section>
@@ -2006,7 +2034,7 @@ function platformSection(items) {
   return body + `<p><button class="btn ghost" type="button" data-act="refresh-providers">${esc(t("platformsBtn"))}</button></p>`;
 }
 function goalsHtml() {
-  return `${pageHead("Cineteca", t("goalsTitle"), t("goalsLead"))}<div class="goals">${GOALS.map(goalCard).join("")}</div>`;
+  return `${pageHead("", t("goalsTitle"), t("goalsLead"))}<div class="goals">${GOALS.map(goalCard).join("")}</div>`;
 }
 function goalCard(goal) {
   const value = goal.value(state.items);
@@ -2019,7 +2047,7 @@ function goalCard(goal) {
 
 function settingsHtml() {
   const trash = state.items.filter((i) => (i.kind === "movie" || i.kind === "tv") && i.del);
-  return `${pageHead("Cineteca", t("settingsTitle"), t("settingsLead"))}
+  return `${pageHead("", t("settingsTitle"), t("settingsLead"))}
     <p class="banner">${esc(sheetUrl() && settings.token ? t("truthOn") : t("truthOff"))}</p>
     <section class="card stack">
       <h3>${esc(t("setLook"))}</h3>
