@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,520;9..144,640&family=Outfit:wght@380;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@380;500;600&display=swap" rel="stylesheet">
 <style>
 :root, html[data-theme="dark"], html[data-theme="light"] {
   --bg: #0e0e10;
@@ -31,13 +31,13 @@ html[data-theme="light"] { --bg: #0e0e10; }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  background:
-    radial-gradient(70% 80% at 0% 0%, rgba(198, 245, 74, 0.62), transparent 58%),
-    radial-gradient(65% 75% at 100% 100%, rgba(157, 78, 255, 0.62), transparent 60%),
-    linear-gradient(128deg, #1d2a0c 0%, #141816 46%, #241433 100%);
+  background: #0f0e17;
+  background-image:
+    radial-gradient(90% 42% at 0% 0%, #2e1a47, transparent 62%),
+    radial-gradient(80% 40% at 100% 100%, #2e1a47, transparent 58%);
   background-attachment: fixed;
-  color: #f7f4fb;
-  font-family: var(--sans);
+  color: #fff;
+  font-family: Inter, var(--sans);
   font-size: 16px;
   line-height: 1.45;
   min-height: 100vh;
@@ -707,6 +707,67 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
   .nowcard .tile-poster { min-height: 0; aspect-ratio: 16 / 8.4; }
   .disc { flex-basis: calc((100% - 20px) / 3); }
 }
+.shell { max-width: 414px; margin: 0 auto; border-radius: 40px; overflow: hidden; }
+.maincol { max-width: 414px; padding: 18px 20px calc(110px + env(safe-area-inset-bottom)); }
+.apptitle { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; color: #d2f838; }
+.apptitle h1 { margin: 0; font-family: Inter, sans-serif; font-size: 24px; font-weight: 700; color: #fff; letter-spacing: -0.03em; }
+.apptitle .logo { width: 28px; height: 28px; }
+.hours {
+  margin: 0 0 16px; padding: 12px 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(20,20,25,0.7);
+  border-radius: 24px;
+  box-shadow: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.hourpills button { padding: 6px 14px; border-radius: 16px; border: 0; background: transparent; color: #a0a0ab; font-size: 13px; font-weight: 600; min-height: 0; }
+.hourpills button[aria-pressed="true"] { background: #d2f838; color: #111; font-weight: 700; }
+.searchpill {
+  display: flex; align-items: center; gap: 10px; height: 48px; margin: 0 0 16px; padding: 0 16px;
+  border-radius: 24px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+}
+.searchpill svg { width: 18px; height: 18px; flex: 0 0 auto; color: #71717a; }
+.searchpill input {
+  width: 100%; height: 100%; border: 0; background: transparent; color: #fff;
+  font-size: 14px; outline: none;
+}
+.searchpill input::placeholder { color: #71717a; }
+.coverflow {
+  display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 8px calc(50% - 80px) 8px; scrollbar-width: none; perspective: none;
+}
+.coverflow::-webkit-scrollbar { display: none; }
+.disc {
+  flex: 0 0 160px; width: 160px; scroll-snap-align: center;
+  border: 0; background: transparent; color: inherit; text-align: left; padding: 0;
+}
+.disc-art .tile-poster { width: 160px; height: 240px; aspect-ratio: auto; border-radius: 18px; overflow: hidden; }
+.disc-score { top: 12px; right: 12px; background: #d2f838; color: #111; font-size: 13px; font-weight: 700; box-shadow: 0 0 12px rgba(210,248,56,.55); }
+.disc b { font-size: 14px; font-weight: 700; color: #fff; margin-top: 8px; }
+.disc .sub { display: block; font-size: 12px; color: #a1a1aa; }
+.quick { display: flex; flex-wrap: nowrap; gap: 8px; overflow-x: auto; white-space: nowrap; margin-top: 14px; scrollbar-width: none; }
+.quick .chip { height: 36px; min-height: 36px; padding: 0 16px; border-radius: 18px; background: rgba(255,255,255,0.07); color: #eee; border: 0; font-size: 13px; }
+.quick .chip[aria-pressed="true"] { background: #d2f838; color: #111; }
+.nav {
+  height: 70px; width: min(372px, 90%); bottom: 20px; border-radius: 35px; padding: 0 8px;
+  background: rgba(18, 18, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: none;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.nav button, .nav button[aria-current="page"], .nav button[aria-current="page"]:not(.orb) {
+  background: transparent; color: #a0a0ab; width: auto; height: auto; min-height: 46px; margin: 0; border-radius: 18px;
+}
+.nav button[aria-current="page"]:not(.orb),
+.nav button[aria-current="page"]:not(.orb) svg,
+.nav button[aria-current="page"]:not(.orb) .logo { color: #d2f838; }
+@media (min-width: 960px) {
+  .shell, .maincol { max-width: 414px; padding-left: 20px; padding-right: 20px; }
+  .nav { width: min(372px, 90%); height: 70px; bottom: 20px; border-radius: 35px; background: rgba(18, 18, 22, 0.85); }
+  .disc { flex-basis: 160px; }
+}
 </style>
 
 </head>
@@ -1043,7 +1104,7 @@ function esc(s) {
     .replace(/'/g, "&#39;");
 }
 function logoSvg() {
-  return `<svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><path fill="none" stroke="#c6f54a" stroke-width="9" stroke-linecap="round" d="M47 15a20 20 0 1 0 .2 34"/><g fill="#14181c"><circle cx="34" cy="13" r="2.2"/><circle cx="21" cy="17" r="2.2"/><circle cx="13" cy="26" r="2.2"/><circle cx="13" cy="38" r="2.2"/><circle cx="21" cy="47" r="2.2"/><circle cx="34" cy="51" r="2.2"/></g><path fill="#c6f54a" d="M25 26.2 39 32 25 37.8z"/></svg>`;
+  return `<svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" d="M47 15a20 20 0 1 0 .2 34"/><g fill="#121216"><circle cx="34" cy="13" r="2.2"/><circle cx="21" cy="17" r="2.2"/><circle cx="13" cy="26" r="2.2"/><circle cx="13" cy="38" r="2.2"/><circle cx="21" cy="47" r="2.2"/><circle cx="34" cy="51" r="2.2"/></g><path fill="currentColor" d="M25 26.2 39 32 25 37.8z"/></svg>`;
 }
 function icon(name) {
   const paths = {
@@ -1620,10 +1681,12 @@ function bindCoverflow() {
     for (const disc of el.querySelectorAll(".disc")) {
       const r = disc.getBoundingClientRect();
       const delta = (r.left + r.width / 2 - mid) / Math.max(1, el.clientWidth);
-      const ry = Math.max(-10, Math.min(10, delta * 14));
-      let scale = Math.max(0.94, 1.06 - Math.abs(delta) * 0.18);
-      if (disc === pressed) scale *= 1.06;
-      disc.style.transform = `rotateY(${(-ry).toFixed(1)}deg) scale(${scale.toFixed(3)})`;
+      const ad = Math.abs(delta);
+      const on = ad < 0.18;
+      let scale = on ? 1 : 0.9;
+      if (disc === pressed) scale *= 1.04;
+      disc.style.transform = `scale(${scale.toFixed(3)})`;
+      disc.style.opacity = on ? "1" : "0.7";
     }
   };
   el.addEventListener("pointerdown", (e) => { pressed = e.target.closest(".disc"); tick(); });
@@ -1936,17 +1999,17 @@ function libraryHtml() {
   return `
     ${heading ? `<p class="eyebrow">${esc(t("lists"))}</p><h2>${esc(heading)}</h2>` : ""}
     ${state.route.name === "list" ? `<p><button class="btn ghost" type="button" data-act="delete-list" data-name="${esc(state.route.list)}">${esc(t("deleteList"))}</button></p>` : ""}
+    <header class="apptitle">${logoSvg()}<h1>Cineteca</h1></header>
     ${homeStageHtml()}
-    <div class="dock">
-      <input class="field" id="q" type="search" enterkeyhint="search" placeholder="${esc(t("searchPh"))}" value="${esc(state.f.q)}" autocomplete="off">
-      <div class="dockrow">
-        <div class="chips statusline">
-          ${[["tutti", t("statusAll")], ...STATUSES.map((s) => [s, t("st_" + s)])].map(([s, label]) => `<button type="button" class="chip" data-act="set-filter" data-status="${s}" aria-pressed="${state.f.status === s}">${esc(label)}</button>`).join("")}
-          ${lists.map((list) => `<button type="button" class="chip" data-act="open-list" data-name="${esc(list.name)}" aria-pressed="${state.route.name === "list" && state.route.list === list.name}">${esc(list.name)}</button>`).join("")}
-        </div>
-      </div>
-    </div>
+    <label class="searchpill">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10.4 3a7.4 7.4 0 0 1 5.9 11.8l3.9 3.9a1.15 1.15 0 0 1-1.63 1.62l-3.9-3.9A7.4 7.4 0 1 1 10.4 3zm0 2.2a5.2 5.2 0 1 0 0 10.4 5.2 5.2 0 0 0 0-10.4z"/></svg>
+      <input id="q" type="search" enterkeyhint="search" placeholder="${esc(t("searchPh"))}" value="${esc(state.f.q)}" autocomplete="off">
+    </label>
     <div id="list">${homeShelfHtml(rows)}</div>
+    <div class="chips statusline quick">
+      ${[["tutti", t("statusAll")], ...STATUSES.map((s) => [s, t("st_" + s)])].map(([s, label]) => `<button type="button" class="chip" data-act="set-filter" data-status="${s}" aria-pressed="${state.f.status === s}">${esc(label)}</button>`).join("")}
+      ${lists.map((list) => `<button type="button" class="chip" data-act="open-list" data-name="${esc(list.name)}" aria-pressed="${state.route.name === "list" && state.route.list === list.name}">${esc(list.name)}</button>`).join("")}
+    </div>
     ${demoBannerHtml()}
     <details class="filters">
         <summary>${esc(t("filters"))}</summary>
@@ -1968,31 +2031,23 @@ function filtersActive() {
   return !!(state.f.q.trim() || state.f.kind !== "tutti" || state.f.status !== "tutti" || state.f.genre || state.f.tag || state.route.name === "list");
 }
 function homeStageHtml() {
-  const all = titlesOf(state.items);
-  const hero = all.find((i) => i.status === "in_corso") || all[0];
-  return `${hoursHtml()}${hero ? `<div class="homestage">${featureGlass(hero)}</div>` : ""}`;
+  return hoursHtml();
 }
 function homeShelfHtml(rows) {
   const list = rows || [];
   if (!titlesOf(state.items).length) return `<div class="empty">${esc(t("emptyLibrary"))}</div>`;
   if (!list.length) return `<div class="empty">${esc(t("emptyFilter"))}</div>`;
-  const all = titlesOf(state.items);
-  const hero = all.find((i) => i.status === "in_corso") || all[0];
-  const catalog = hero ? list.filter((i) => i.id !== hero.id) : list;
-  if (!catalog.length) return "";
-  return `<div class="jukehead"><h3><i class="rec"></i>${esc(t("jukebox"))}</h3><span class="tiny">${esc(t("jukeboxHint"))} ‹ ›</span></div><div class="coverflow" id="coverflow">${catalog.map(discHtml).join("")}</div>`;
+  return `<div class="coverflow" id="coverflow">${list.map(discHtml).join("")}</div>`;
 }
 function discHtml(item) {
-  const p = item.kind === "tv" ? episodeProgress(item) : null;
-  const meta = p && (p.total || p.seen) ? `${p.seen}/${p.total} ep.` : [item.year, item.kind === "tv" ? t("tv") : t("movie")].filter(Boolean).join(" · ");
+  const sub = [item.year, (item.genres && item.genres[0]) || (item.kind === "tv" ? t("tv") : t("movie"))].filter(Boolean).join(" · ");
   const score = item.rating != null ? formatScore(item.rating) : "";
   return `<button class="disc" type="button" data-act="open" data-id="${esc(item.id)}">
     <span class="disc-art"><span class="tile-poster">${posterInner(item.posterPath, item.title)}
       ${score ? `<em class="disc-score">${esc(score)}</em>` : ""}
-      <em class="disc-status s-${esc(item.status)}">${esc(t("st_" + item.status))}</em>
     </span></span>
     <b>${esc(item.title || t("none"))}</b>
-    <span class="meta">${esc(meta)}</span>
+    <span class="sub">${esc(sub)}</span>
   </button>`;
 }
 function libraryItemsHtml(rows) {
