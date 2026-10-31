@@ -32,8 +32,10 @@ html[data-theme="light"] { --bg: #0e0e10; }
 html, body { margin: 0; padding: 0; }
 body {
   background:
-    radial-gradient(circle at 50% 0%, rgba(46, 26, 71, 0.5), transparent 70%),
-    linear-gradient(180deg, #1a102f 0%, #0b0a10 50%, #0b0a10 100%);
+    radial-gradient(70% 45% at 0% 0%, rgba(210, 248, 56, 0.28), transparent 58%),
+    radial-gradient(65% 50% at 100% 100%, rgba(168, 85, 247, 0.5), transparent 62%),
+    radial-gradient(40% 30% at 80% 0%, rgba(46, 26, 71, 0.7), transparent 55%),
+    #0c0e12;
   background-attachment: fixed;
   color: #f4f4f5;
   font-family: "Plus Jakarta Sans", var(--sans);
@@ -788,52 +790,90 @@ h3 { font-size: 18px; margin: 18px 0 8px; }
 .sync-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #a1a1aa; }
 .sync-badge.on::before { background: #10b981; }
 .sync-badge.bad::before { background: #ef4444; }
-.glass { background: rgba(22, 23, 30, 0.75); border: 1px solid rgba(255,255,255,.08); border-radius: 24px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
-.hours-card { padding: 14px 16px; margin: 0 0 16px; }
-.hours-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.hours-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #a1a1aa; }
-.hours-card .hours-num { margin: 4px 0; font-size: 32px; font-weight: 800; color: #fff; line-height: 1; }
-.hours-card .hours-num span { font-size: 18px; color: #d2f838; font-weight: 700; margin-left: 4px; }
-.hours-sub { margin: 0 0 12px; font-size: 12px; color: #a1a1aa; }
-.hours-card .hourpills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: rgba(0,0,0,.4); padding: 4px; border-radius: 16px; }
-.hours-card .hourpills button { padding: 8px 0; font-size: 12px; font-weight: 600; border-radius: 12px; color: #a1a1aa; background: transparent; min-height: 0; }
-.hours-card .hourpills button[aria-pressed="true"] { background: #d2f838; color: #000; }
-.hours-card .splitbar { width: 80px; height: 6px; }
-.hero-card { position: relative; overflow: hidden; padding: 14px; margin: 0 0 16px; min-height: 140px; display: flex; flex-direction: column; justify-content: space-between; color: inherit; text-align: left; }
-.hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.35; filter: blur(4px); transform: scale(1.08); }
-.hero-tag { position: relative; z-index: 1; display: inline-block; padding: 3px 10px; border-radius: 99px; background: rgba(210,248,56,.15); border: 1px solid rgba(210,248,56,.3); color: #d2f838; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
-.hero-title { position: relative; z-index: 1; margin: 0 0 2px; font-size: 20px; font-weight: 800; color: #fff; }
-.hero-meta { position: relative; z-index: 1; margin: 0; font-size: 12px; color: rgba(255,255,255,.8); }
-.hero-foot { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; margin-top: 12px; }
-.hero-meter { flex: 1; height: 4px; border-radius: 99px; background: rgba(255,255,255,.2); overflow: hidden; }
-.hero-meter i { display: block; height: 100%; background: #d2f838; }
-.hero-btn { width: 38px; height: 38px; border-radius: 50%; background: #d2f838; color: #000; display: grid; place-items: center; font-size: 13px; font-weight: 800; }
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 26px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 12px 32px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(22px) saturate(1.6);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+}
+.hours-card { padding: 14px 14px 12px; margin: 0 0 14px; }
+.hours-top, .hours-mid { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.hours-top { flex-wrap: nowrap; }
+.hours-title { white-space: nowrap; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #e7ffb0; }
+.hours-mid { align-items: flex-end; margin-top: 8px; }
+.hours-card .hours-num { margin: 0; font-size: 40px; font-weight: 800; color: #fff; line-height: 0.95; }
+.hours-card .hours-num span { font-size: 16px; color: #d2f838; font-weight: 700; margin-left: 4px; }
+.hours-sub { margin: 8px 0 0; font-size: 12px; color: #d5e0c4; }
+.hours-card .hourpills { display: flex; flex-wrap: nowrap; gap: 0; background: rgba(0,0,0,.35); padding: 3px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); }
+.hours-card .hourpills button { white-space: nowrap; padding: 6px 8px; font-size: 11px; font-weight: 700; border-radius: 999px; color: #d5d5d8; background: transparent; min-height: 0; border: 0; }
+.hours-card .hourpills button[aria-pressed="true"] { background: #d2f838; color: #111; }
+.hours-split { display: flex; flex-direction: column; gap: 4px; width: 108px; flex: 0 0 auto; }
+.splitlabs { display: flex; justify-content: space-between; color: #9aa0a6; font-size: 11px; }
+.hours-card .splitbar { display: flex; width: 100%; height: 7px; border-radius: 99px; overflow: hidden; background: rgba(255,255,255,.12); }
+.hours-card .splitbar i { display: block; height: 100%; }
+.posterhero { position: relative; display: block; height: 196px; margin: 0 0 14px; border-radius: 26px; overflow: hidden; border: 1px solid rgba(255,255,255,.22); box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 16px 36px rgba(0,0,0,.35); }
+.posterhero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.posterhero-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.05) 18%, rgba(0,0,0,.78)); }
+.posterhero-top, .posterhero-bot, .posterhero-bar { position: absolute; z-index: 1; left: 12px; right: 12px; }
+.posterhero-top { top: 12px; display: flex; justify-content: space-between; gap: 8px; }
+.gpill { padding: 4px 10px; border-radius: 999px; background: rgba(8,10,12,.42); border: 1px solid rgba(255,255,255,.28); color: #fff; font-size: 11px; font-weight: 700; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.posterhero-top .gpill:first-child { color: #e7ffb0; border-color: rgba(210,248,56,.5); }
+.posterhero-bot { bottom: 16px; display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; color: #fff; }
+.posterhero-bot b { display: block; font-size: 24px; font-weight: 800; }
+.posterhero-bot span span { font-size: 12px; color: rgba(255,255,255,.86); }
+.apri { background: #d2f838; color: #111; border-radius: 999px; padding: 8px 14px; font-weight: 800; white-space: nowrap; box-shadow: 0 8px 18px rgba(210,248,56,.3); }
+.posterhero-bar { bottom: 8px; height: 4px; border-radius: 99px; background: rgba(255,255,255,.28); overflow: hidden; }
+.posterhero-bar i { display: block; height: 100%; background: #d2f838; }
+.search-box input {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2);
+  backdrop-filter: blur(18px);
+}
+.chips-row .chip {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2);
+}
+.coverflow { gap: 10px; padding: 4px 0 12px; scroll-snap-type: none; }
+.disc { flex: 0 0 calc((100% - 20px) / 3); width: auto; }
+.disc-poster { width: 100%; height: auto; aspect-ratio: 2 / 3; border-radius: 16px; border: 1px solid rgba(255,255,255,.22); box-shadow: 0 10px 24px rgba(0,0,0,.35); }
+.nav {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 16px 40px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(28px) saturate(1.8);
+  -webkit-backdrop-filter: blur(28px) saturate(1.8);
+}
+.nav button[aria-current="page"]:not(.orb) { background: rgba(255,255,255,.2); color: #d2f838; }
+.sheet { background: rgba(14, 16, 22, 0.72); border-color: rgba(255,255,255,.24); backdrop-filter: blur(24px); }
+.ticket { border-radius: 18px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); backdrop-filter: blur(16px); }
+@media (min-width: 960px) {
+  .shell, .maincol { max-width: 430px; }
+  .disc { flex-basis: calc((100% - 20px) / 3); }
+}
 .search-box { position: relative; margin: 0 0 12px; }
 .search-box svg { position: absolute; left: 16px; top: 15px; width: 18px; height: 18px; color: #71717a; }
-.search-box input { width: 100%; height: 48px; padding: 0 16px 0 44px; border-radius: 24px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.05); color: #fff; font-size: 14px; }
+.search-box input { width: 100%; height: 48px; padding: 0 16px 0 44px; border-radius: 24px; color: #fff; font-size: 14px; }
 .search-box input::placeholder { color: #71717a; }
 .chips-row { display: flex; gap: 8px; overflow-x: auto; margin: 0 0 16px; scrollbar-width: none; }
 .chips-row::-webkit-scrollbar { display: none; }
-.chips-row .chip { flex: 0 0 auto; height: 36px; min-height: 36px; padding: 0 16px; border-radius: 18px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: #a1a1aa; font-size: 13px; font-weight: 600; }
-.chips-row .chip[aria-pressed="true"] { background: #d2f838; color: #000; border-color: transparent; }
+.chips-row .chip { flex: 0 0 auto; height: 36px; min-height: 36px; padding: 0 16px; border-radius: 18px; color: #eee; font-size: 13px; font-weight: 600; }
+.chips-row .chip[aria-pressed="true"] { background: #d2f838; color: #111; border-color: transparent; }
 .juke-head { display: flex; justify-content: space-between; align-items: center; margin: 0 0 10px; }
 .juke-title { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #d2f838; }
 .juke-hint { font-size: 11px; color: #a1a1aa; }
-.coverflow { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 8px 0 20px; scrollbar-width: none; }
-.disc { flex: 0 0 160px; width: 160px; scroll-snap-align: center; background: transparent; border: 0; padding: 0; text-align: left; color: inherit; }
-.disc-poster { display: block; width: 160px; height: 230px; border-radius: 20px; overflow: hidden; position: relative; background: #1e1b2e; box-shadow: 0 12px 24px rgba(0,0,0,.4); }
+.coverflow { display: flex; overflow-x: auto; scrollbar-width: none; }
+.coverflow::-webkit-scrollbar { display: none; }
+.disc-poster { position: relative; overflow: hidden; display: block; }
 .disc-poster img { width: 100%; height: 100%; object-fit: cover; }
-.disc-badge { position: absolute; top: 10px; right: 10px; padding: 3px 8px; border-radius: 99px; background: #d2f838; color: #000; font-size: 11px; font-weight: 800; font-style: normal; }
-.disc-status { position: absolute; left: 10px; bottom: 10px; padding: 3px 8px; border-radius: 99px; background: rgba(0,0,0,.6); color: #fff; font-size: 10px; font-weight: 600; font-style: normal; border: 1px solid rgba(255,255,255,.15); }
-.disc-name { display: block; margin: 8px 0 2px; font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.disc-meta { display: block; font-size: 12px; color: #a1a1aa; }
-.nav { height: auto; width: min(390px, calc(100% - 32px)); bottom: calc(16px + env(safe-area-inset-bottom)); border-radius: 35px; padding: 8px 12px; background: rgba(18,18,22,.85); }
-.nav button, .nav button[aria-current="page"], .nav button[aria-current="page"]:not(.orb) { height: 48px; min-height: 48px; border-radius: 20px; background: transparent; color: #71717a; }
-.nav button[aria-current="page"]:not(.orb) { background: rgba(255,255,255,.1); color: #d2f838; }
-@media (min-width: 960px) {
-  .shell, .maincol { max-width: 430px; }
-  .disc { flex-basis: 160px; }
-}
+.disc-badge { position: absolute; top: 8px; right: 8px; padding: 3px 8px; border-radius: 99px; background: #d2f838; color: #111; font-size: 11px; font-weight: 800; font-style: normal; box-shadow: 0 0 12px rgba(210,248,56,.45); }
+.disc-status { position: absolute; left: 8px; bottom: 8px; padding: 3px 8px; border-radius: 99px; background: rgba(8,10,12,.55); color: #fff; font-size: 10px; font-weight: 700; font-style: normal; border: 1px solid rgba(255,255,255,.22); backdrop-filter: blur(8px); }
+.disc-name { display: block; margin: 8px 0 2px; font-size: 13px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.disc-meta { display: block; font-size: 11px; color: #a1a1aa; }
 </style>
 
 </head>
@@ -1982,13 +2022,18 @@ function hoursHtml() {
   const filmPct = scope === "movie" ? 100 : scope === "tv" ? 0 : Math.round((b.filmMins / total) * 100);
   const btn = (id, label) => `<button type="button" data-act="hours" data-scope="${id}" aria-pressed="${scope === id}">${esc(label)}</button>`;
   return `<section class="glass hours-card">
-    <div class="hours-header">
+    <div class="hours-top">
       <span class="hours-title">${esc(t("hoursKicker"))}</span>
-      <span class="splitbar" aria-hidden="true"><i class="film" style="width:${filmPct}%"></i><i class="tv" style="width:${100 - filmPct}%"></i></span>
+      <div class="hourpills">${btn("tutti", t("hoursAll"))}${btn("movie", t("hoursMovie"))}${btn("tv", t("hoursTv"))}</div>
     </div>
-    <p class="hours-num">${esc(formatHours(mins))} <span>${esc(t("hoursUnit"))}</span></p>
+    <div class="hours-mid">
+      <p class="hours-num">${esc(formatHours(mins))} <span>${esc(t("hoursUnit"))}</span></p>
+      <span class="hours-split">
+        <span class="splitlabs"><span>Film</span><span>Serie</span></span>
+        <span class="splitbar" aria-hidden="true"><i class="film" style="width:${filmPct}%"></i><i class="tv" style="width:${100 - filmPct}%"></i></span>
+      </span>
+    </div>
     <p class="hours-sub">${esc(detail)}</p>
-    <div class="hourpills">${btn("tutti", t("hoursAll"))}${btn("movie", t("hoursMovie"))}${btn("tv", t("hoursTv"))}</div>
   </section>`;
 }
 function viewSwitch() {
@@ -2127,17 +2172,18 @@ function featureGlass(item) {
   const pct = progressPct(item);
   const bg = posterUrl(item.posterPath);
   const ep = p && (p.total || p.seen) ? `Ep. ${p.seen} di ${p.total || p.seen}` : (item.kind === "tv" ? t("tv") : t("movie"));
-  return `<div class="glass hero-card" data-act="open" data-id="${esc(item.id)}" role="button" tabindex="0">
-    <div class="hero-bg" style="${bg ? `background-image:url('${esc(bg)}')` : ""}"></div>
-    <div>
-      <span class="hero-tag">${esc(joke)}</span>
-      <h2 class="hero-title">${esc(item.title || t("none"))}</h2>
-      <p class="hero-meta">${item.rating != null ? "★ " + esc(formatScore(item.rating)) + " · " : ""}${esc(ep)}</p>
-    </div>
-    <div class="hero-foot">
-      <span class="hero-meter"><i style="width:${pct}%"></i></span>
-      <span class="hero-btn" aria-hidden="true">▶</span>
-    </div>
+  return `<div class="posterhero" data-act="open" data-id="${esc(item.id)}" role="button" tabindex="0">
+    ${bg ? `<img class="posterhero-img" alt="" src="${esc(bg)}">` : ""}
+    <span class="posterhero-shade"></span>
+    <span class="posterhero-top"><span class="gpill">${esc(joke)}</span><span class="gpill">${esc(item.kind === "tv" ? t("tv") : t("movie"))}</span></span>
+    <span class="posterhero-bot">
+      <span>
+        <b>${esc(item.title || t("none"))}</b>
+        <span>${item.rating != null ? "★ " + esc(formatScore(item.rating)) + " · " : ""}${esc(ep)}</span>
+      </span>
+      <span class="apri">${esc(t("openTitle"))} ›</span>
+    </span>
+    <span class="posterhero-bar"><i style="width:${pct}%"></i></span>
   </div>`;
 }
 function lineHtml(item) {
